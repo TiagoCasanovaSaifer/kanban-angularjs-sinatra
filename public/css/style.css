@@ -1,0 +1,151 @@
+/*@import url(https://fonts.googleapis.com/css?family=Wellfleet);
+@import url(https://fonts.googleapis.com/css?family=Princess+Sofia);
+@import url(https://fonts.googleapis.com/css?family=Patrick+Hand+SC);
+@import url(https://fonts.googleapis.com/css?family=Roboto+Condensed:400,700);
+@import url(https://fonts.googleapis.com/css?family=Englebert);
+@import url(https://fonts.googleapis.com/css?family=Noticia+Text);
+@import url(https://fonts.googleapis.com/css?family=Great+Vibes);
+@import url(https://fonts.googleapis.com/css?family=Galindo);*/
+
+
+
+@font-face {
+    font-family: 'Didact Gothic';
+        src: url('http://openfontlibrary.org/assets/fonts/didact-gothic/4e262e7a846d97a38c8cbb30091e6ab1/cf5117a628442430319eed60e1efdb30/DidactGothicMedium.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+      }
+body {
+    
+}
+.column {
+    height:575px;	
+	/*background-image: url(http://subtlepatterns.com/patterns/subtle_grunge.png); background-position: initial initial; background-repeat: initial initial;*/
+    background-color:transparent;
+	width:100%;
+/*	border:1px #999 dashed;*/
+}
+
+.kanban-board {
+    margin:14px;
+    height:800px;
+}
+
+.indicador-sequencial {
+    width: 10%;
+    text-align: right;
+    padding-right:5px;
+}
+
+.kanban-item {
+    min-height: 70px;
+    width:85%;
+    margin-left:auto;
+    margin-right: auto;
+    margin-top:4px;
+    background-color: #FFFFA5;/* yellow color found here http://www.colourlovers.com/color/FFFFA5/PostIt_Gelb */
+    font-size:16px;
+    font-family: 'Droid Serif';/*'Patrick Hand SC';*/
+}
+
+.newtask-text
+{
+    height:70px;
+    resize: none;
+}
+
+.kanban-header {
+	margin-left:auto;
+	margin-right:auto;
+	width:100%;
+	background-color:TRANSPARENT;
+	color:#777;
+    font-size:18px;
+    height:40px;
+	text-align:center;
+	font-weight:bold;
+	border:none;
+    padding-top:10px;
+    font-family: 'Libre Baskerville';/*Didact Gothic';/*'Concert One';/* 'Galindo', 'Englebert';'Patrick Hand SC';*/
+    text-shadow: 0 1px 0 rgba(0,0,0,0.01);
+}
+
+.column > .container {
+	width:100%;
+	height:100%;
+    position:relative
+}
+
+.column > .container > .task-list-template1 {
+    width: 100%;
+    height: 100%;
+    top:40px;bottom:20px;left:0px;right:0px;
+    /*overflow-y:auto;*/
+}
+
+.column > .container > .task-list-template2 {
+    width: 100%;
+    height:100%;
+    top:10px;bottom:20px;left:0px;right:0px;
+    /*overflow-y:auto;*/
+}
+
+form.entrada_dados {
+    margin: 0px 0px 2px;
+    margin-left: auto;
+    margin-right:auto;
+    text-align:center;
+}
+
+.container-entrada {
+  padding-top: 90px;
+}
+.form-entrada {
+    max-width: 340px;
+    padding: 19px 29px 29px;
+    margin: 0 auto 20px;
+    background-color: #fff;
+    border: 1px solid #e5e5e5;
+    -webkit-border-radius: 5px;
+       -moz-border-radius: 5px;
+            border-radius: 5px;
+    -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+       -moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+            box-shadow: 0 1px 2px rgba(0,0,0,.05);
+    }
+.form-entrada .form-entrada-heading,
+.form-entrada .checkbox {
+    margin-bottom: 10px;
+}
+
+.form-entrada input {
+    width:300px;
+}
+
+form-entrada select {
+    width: 320px;
+}
+     
+
+
+#export > textarea {
+    height:400px;    
+}
+body {
+	/*background-image: url(../img/exclusive_paper.png); background-position: initial initial; background-repeat: initial initial;*/
+    background-image: url(../img/subtle_grunge.png); background-position: initial initial; background-repeat: initial initial;
+}
+
+.ui-sortable-helper {
+  background: #8cf;
+}
+
+/***
+Alterando classe .thumbnail do bootstrap para evitar lentidão no drag and drop
+http://eli.eliandlyndi.com/2011/12/18/jui-sortable-bootstrap-perf-problem/
+***/
+.thumbnail {
+    -webkit-transition: all 0.005s ease-in-out;
+     -moz-transition: all 0.005s ease-in-out;
+    transition: all 0.005s ease-in-out;
+}

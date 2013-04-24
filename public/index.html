@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+<script src="js/lib/jquery.min.js"></script>
+<script src="js/lib/jquery-ui.min.js"></script>
+
+<script src="js/lib/jquery.ui.touch-punch.min.js"></script>
+
+
+<link href="css/lib/bootstrap.css" rel="stylesheet" type="text/css" />
+<link href="css/lib/bootstrap-responsive.css" rel="stylesheet" type="text/css" />
+
+<link href="css/lib/angular-ui.css" rel="stylesheet" type="text/css" />
+<script src="js/lib/bootstrap.js"></script>
+<!--script src="http://jashkenas.github.com/coffee-script/extras/coffee-script.js"></script-->
+<script src="js/lib/angular.min.js"></script>
+<script src="js/lib/angular-resource.js"></script>
+<script src="js/lib/angular-ui.js"></script>    
+
+<script src="js/lib/angular-multiSortable.js"></script>
+<link href="css/style.css" rel="stylesheet" type="text/css" />
+
+
+<script src="js/application.js"></script>
+<script src="js/kanban.web.controllers.js"></script>
+<script src="js/directives.js"></script>
+<script src="js/filters.js"></script>
+<script src="js/services.js"></script>
+
+<meta charset=utf-8 />
+<title>Kanban</title>
+
+<meta name="viewport" content="width=device-width, user-scalable=no" />
+<style>
+.container-entrada {
+  padding-top: 90px;
+}
+.form-entrada {
+        max-width: 340px;
+        padding: 19px 29px 29px;
+        margin: 0 auto 20px;
+        background-color: #fff;
+        border: 1px solid #e5e5e5;
+        -webkit-border-radius: 5px;
+           -moz-border-radius: 5px;
+                border-radius: 5px;
+        -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+           -moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+                box-shadow: 0 1px 2px rgba(0,0,0,.05);
+      }
+      .form-entrada .form-entrada-heading,
+      .form-entrada .checkbox {
+        margin-bottom: 10px;
+      }
+
+      .form-entrada input {
+        width:300px;
+      }
+
+      form-entrada select {
+        width: 320px;
+      }
+     
+
+</style>
+</head>
+<body>
+<script type="text/ng-template"  id="kanban.html">
+<div id="kanban">
+<!--inicio topo -->
+    <div class="navbar navbar-inverse">
+      <div class="navbar-inner">
+        <div class="container">
+        <a class="brand" href="#/projeto/{{projectName}}">{{projectName}} / {{kanban.name}}</a>
+        <div class="nav-collapse collapse navbar-responsive-collapse">
+                    <ul class="nav">
+                      <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Outros kanbans <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li ng-repeat="kanban in kanbans"><a ng-click="navegar(projectName, kanban._id)">{{kanban.name}}</a></li>
+                          
+                        </ul>
+                      </li>
+                    </ul>
+                    <!--<form class="navbar-search pull-left" action="">
+                      <input type="text" class="search-query span2" placeholder="Search">
+                    </form>
+                    <ul class="nav pull-right">
+                      <li><a href="#">Link</a></li>
+                      <li class="divider-vertical"></li>
+                      <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                          <li><a href="#">Action</a></li>
+                          <li><a href="#">Another action</a></li>
+                          <li><a href="#">Something else here</a></li>
+                          <li class="divider"></li>
+                          <li><a href="#">Separated link</a></li>
+                        </ul>
+                      </li>
+                    </ul>-->
+                  </div>
+      </div>
+      </div>
+<!--fim topo -->
+	<div class="kanban-board row-fluid">
+    
+		<div class="column span2" ng-repeat="status in getCurrentKanban().status">
+      <div class="kanban-header">{{status.name}}</div>
+      <div class="container">
+          <form ng-show="$index == 0" class="entrada_dados" ng-submit="addTask(status)" autofocus>
+             <textarea ng-model="status.newTask.text"  
+                    ui-keydown="{'ctrl-enter':'tasksKeypressCallback($event, status)'}"
+                    class="span11 newtask-text" ng-init="status.newTask.text=''"
+                    placeholder="Adicione aqui novos items  (Pressione Control+Enter após digitar o texto para adicionar a atividade)" />
+                    <span ng-show="showControlEnterTip(status) && controlEnterTipEnabled" class="label label-info">Pressione Control+Enter após digitar o texto para adicionar a atividade</span>
+                    <input class="btn btn-info" type="submit" value="Adicionar" />
+      </form>
+        <div class="task-list-template1 grupo-items" ui-multi-sortable ng-model="kanban" model-subset="status[{{$index}}].tasks">
+                    <div class="thumbnail kanban-item" ng-repeat="task in status.tasks">
+                    <i class="close icon-remove pull-right" ng-click="deleteItem(status,$index)"></i>
+                    <a href="#editModal" data-toggle="modal" ng-click="setCurrentEditingTask(status,$index)"><i class="close icon-pencil pull-right"></i></a>
+                    <p class="pull-right indicador-sequencial">#{{$index+1}}</p>
+                    <p ng-bind-html-unsafe="task.text | newlines"></p>
+                    </div>
+                    
+          </div>
+      </div>   
+    </div>
+
+	
+	</div>
+
+
+<!-- Modal -->
+<div id="editModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="editModalLabel">Alterar estória</h3>
+  </div>
+  <div class="modal-body" class="span12 pagination-centered">
+    <form ng-submit="updateTask()" class="pagination-centered">
+        <fieldset>
+             <textarea ng-model="getEditingTask().text"  
+                    ui-keydown="{'ctrl-enter':'keypressEditingCallback($event)'}"
+                    class="span5 newtask-text"></textarea>
+        </fieldset>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Fechar</button>
+  </div>
+</div>
+    
+  
+
+</script>
+
+  <!-- template1.html -->
+  <script type="text/ng-template" id="form-template1.html">
+     <form class="entrada_dados" ng-submit="addTask(column)" autofocus>
+             <textarea ng-model="column.newTask.text"  
+                    ui-keydown="{'ctrl-enter':'tasksKeypressCallback($event, column)'}"
+                    class="span11 newtask-text" ng-init="column.newTask.text=''"
+                    placeholder="Adicione aqui novos items  (Pressione Control+Enter após digitar o texto para adicionar a atividade)" />
+                    <span ng-show="showControlEnterTip(column) && controlEnterTipEnabled" class="label label-info">Pressione Control+Enter após digitar o texto para adicionar a atividade</span>
+                    <input class="btn btn-info" type="submit" value="Adicionar" />
+      </form>
+  </script>
+
+  <!-- template2.html -->
+  <script type="text/ng-template" id="form-template2.html">
+     
+  </script>
+
+<script type="text/ng-template"  id="projectSelection.html">
+ <div class="container container-entrada">
+
+
+      <div ng-show="showProjetoSelection">
+        <form ng-submit="addNewProject()" class="form-entrada">
+          <fieldset>
+            <label>Informe o projeto você deseja acessar?</label>
+            <select ng-focus="showProjetoSelection" ng-model="currentProject" type="text" ng-options="p.name as p.name for p in projects" ng-change="projectChanged()">
+            </select>
+            <div class='text-info'>ou</div>
+            <label>Crie um novo Projeto</label>
+
+          </fieldset>
+          
+            <input class="span2" type='text' ng-model="novoProjeto" placeholder/>
+            <div class="text-center">
+              <button class='btn text-center' type='submit'>Criar Projeto</button>
+            </div>
+          
+        </form>
+      </div>
+      <div ng-hide="showProjetoSelection">
+        <form ng-submit="addNewKanban()"  class="form-entrada">
+          <fieldset>
+            <label>Projeto<label>
+            <input type='text' ng-model="currentProject" disabled>
+            <div ng-show='showKanbansList()'>
+               <label>Escolha o Kanban</label>
+               <select ng-focus="!showProjetoSelection" ng-model="currentKanban" ng-options="k.name for k in kanbans" ng-change="kanbanChanged()"></select>
+               <div class='text-info'>ou</div>
+             </div>
+          </fieldset>
+          
+          <div class="box">
+            <label>Informe o nome do Kanban</label>
+            <input type='text' ng-model="novoKanban" placeholder="ex: 'Iteração 1'" ng-focus="!showProjetoSelection"/>
+          </div>
+          <div class="pagination-centered">
+            <button class='btn-large btn-primary' type='submit'>Criar Kanban</button>
+          </div>
+          <hr/>
+          <div class="pull-right">
+            <a ng-click='retornar()'>Retornar</a>
+          </div>
+        </form>
+      </div>
+  </div>
+</script>
+ <div ng-view></div>
+</div>
+</body>
+</html>

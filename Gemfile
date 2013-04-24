@@ -1,4 +1,5 @@
 source 'https://rubygems.org'
+source 'http://gemcutter.org'
 
 gem 'mongoid'
 gem "mongoid-nested-serialization"
@@ -13,4 +14,11 @@ end
 
 platforms :jruby do
 	gem 'trinidad'
+end
+
+group :development do
+  gem 'capistrano',         '~> 2.15', :require => nil
+  gem 'capistrano-ext',     '~> 1.2.1', :require => nil
+  gem 'capistrano_colors',  '~> 0.5.3', :require => nil
+  gem 'cap-recipes' #https://github.com/nesquena/cap-recipes
 end

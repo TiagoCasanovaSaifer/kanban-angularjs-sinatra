@@ -6,6 +6,7 @@ require './kanban.rb'
 
 require "sinatra/reloader" #if development?
 
+class MyApp < Sinatra::Base
 Mongoid.load!('mongoid.yaml')
 Mongoid.raise_not_found_error = false
 
@@ -141,3 +142,5 @@ post '/project/:name/kanban/:kanban_id/task' do |project_name, kanban_id|
     error 404, 'project not found'
   end
 end
+end
+

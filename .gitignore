@@ -1,1 +1,14 @@
-.bundle\n
+.bundle
+.loadpath
+.project
+.rvmrc
+Thumbs.db
+log/*.log
+Capfile
+config/app_config.yml
+config/database.yml
+config/deploy.rb
+doc/*
+public/cache/**/*
+tmp/*
+vendor/

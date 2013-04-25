@@ -211,12 +211,32 @@ $scope.taskUpdated = function(targetIdentity, moveData) {
 
 	var currentEditingTask = {};
 	$scope.setCurrentEditingTask = function(column, index) {
-		currentEditingTask = column.tasks[index];
+		var task = column.tasks[index];
+		$scope.currentEditingTask ={
+				id: task._id,
+				status_id: task.status_id,
+				text: task.text
+			};
+		$scope.currentEditingColumn = column;
+		$scope.currentEditingIndex = index;
 	};
 
 	$scope.getEditingTask = function() {
-		return currentEditingTask;
+		if($scope.currentEditingTask != undefined)
+		{
+			return $scope.currentEditingTask;
+		}
+		else
+		{
+			return {text: ''};
+		}
 	};
 
-
+	$scope.changeTaskText = function() {
+		console.log($scope);
+		var task = new $scope.TaskResource($scope.currentEditingTask);
+		task.$save(function(){
+			$scope.currentEditingColumn.tasks[$scope.currentEditingIndex].text = $scope.currentEditingTask.text;
+		});
+	}
 });

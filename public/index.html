@@ -187,7 +187,7 @@
 
           </fieldset>
           
-            <input class="span2" type='text' ng-model="novoProjeto" placeholder/>
+            <input class="span2" type='text' ng-required ng-model="novoProjeto" placeholder/>
             <div class="text-center">
               <button class='btn text-center' type='submit'>Criar Projeto</button>
             </div>
@@ -209,7 +209,7 @@
           
           <div class="box">
             <label>Informe o nome do Kanban</label>
-            <input type='text' ng-model="novoKanban" placeholder="ex: 'Iteração 1'" ng-focus="!showProjetoSelection"/>
+            <input type='text' ng-required ng-model="novoKanban" placeholder="ex: 'Iteração 1'" ng-focus="!showProjetoSelection"/>
           </div>
           <div class="pagination-centered">
             <button class='btn-large btn-primary' type='submit'>Criar Kanban</button>

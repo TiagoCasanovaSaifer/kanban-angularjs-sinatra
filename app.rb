@@ -10,6 +10,7 @@ require "sinatra/reloader" #if development?
 class MyApp < Sinatra::Base
    helpers Sinatra::JSON
 
+set :bind, '0.0.0.0'
 set :port, 3838
 
 Mongoid.load!('mongoid.yaml')

@@ -6,8 +6,11 @@ require './kanban.rb'
 
 require "sinatra/reloader" #if development?
 
+
 class MyApp < Sinatra::Base
    helpers Sinatra::JSON
+
+set :port, 3838
 
 Mongoid.load!('mongoid.yaml')
 Mongoid.raise_not_found_error = false

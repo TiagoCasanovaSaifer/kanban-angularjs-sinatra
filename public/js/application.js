@@ -23,7 +23,9 @@ angular.module('ui.config', []).value('ui.config', {
   sortable: {
     connectWith: '.grupo-items',
     delay: 30,
-    distance: 2
+    distance: 2,
+    update_model: 'taskMoved',
+    reArranged: 'taskUpdated'
   }
 });
 

@@ -8,7 +8,7 @@ myApp.controller('ProjectSelectionCtrl', function($scope, $rootScope, webService
 	$scope.currentProject = $routeParams.project_name;
 	$scope.showProjetoSelection = true;
 
-	console.log($routeParams);
+	//console.log($routeParams);
 	$scope.projects = webServiceStorage.Project.query(function(data) {
 		for (i = 0; i < data.length; i++) {
 			var value = data[i];
@@ -60,9 +60,9 @@ myApp.controller('ProjectSelectionCtrl', function($scope, $rootScope, webService
 	$scope.$watch(function() {
 		return $location.path()
 	}, function() {
-		console.log($location);
-		console.log($scope.$route.current);
-		console.log($scope.$routeParams);
+		//console.log($location);
+		//console.log($scope.$route.current);
+		//console.log($scope.$routeParams);
 		$scope.projects = webServiceStorage.Project.query();
 
 	});

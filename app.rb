@@ -1,4 +1,4 @@
-require 'sinatra'
+require 'sinatra/base'
 require 'sinatra/json'
 require 'json'
 require 'mongoid'
@@ -7,12 +7,18 @@ require './kanban.rb'
 require "sinatra/reloader" #if development?
 
 class MyApp < Sinatra::Base
+   helpers Sinatra::JSON
+
 Mongoid.load!('mongoid.yaml')
 Mongoid.raise_not_found_error = false
 
 
 before do
   content_type :json
+end
+
+get '/' do
+    redirect '/index.html'
 end
 
 #TEMPLATES
@@ -111,7 +117,7 @@ end
 get  '/project/:name/:kanban_id/tasks' do |project_name, kanban_id|
   project = Project.where(name: project_name)
   if(project && kanban=project.kanbans.find(kanban_id))
-    kanban.tasks.to_json
+    kanban.tasks.asc(:seq).to_json
   else
     error 404, 'project/kanban not found'
   end
@@ -126,6 +132,28 @@ delete '/project/:name/kanban/:kanban_id/task/:task_id' do |project_name, kanban
     error 404, 'project/kanban not found'
   end
 end
+
+post '/project/:name/kanban/:kanban_id/task/:task_id' do |project_name, kanban_id, task_id|
+  project = Project.find_by(name: project_name)
+  if(project && kanban=project.kanbans.find(kanban_id))
+    task_attributes = JSON.parse(request.body.read.to_s)
+    
+    unless(params[:rearrange]) 
+      kanban.tasks.find(task_id).update_attributes(task_attributes)
+    else
+      if "destination".eql?(params["target"])
+        kanban.status.find(task_attributes["status_id"]).reArrange(task_id, task_attributes)
+      else
+        kanban.status.find(task_attributes["status_id"]).reArrangeOrigin(task_attributes)
+      end
+    end
+    
+    {result: 'ok'}.to_json
+  else
+    error 404, 'project/kanban not found'
+  end
+end
+
 post '/project/:name/kanban/:kanban_id/task' do |project_name, kanban_id|
   project = Project.find_by(name: project_name)
   if(project)
@@ -142,5 +170,6 @@ post '/project/:name/kanban/:kanban_id/task' do |project_name, kanban_id|
     error 404, 'project not found'
   end
 end
-end
 
+run! if app_file == $0
+end

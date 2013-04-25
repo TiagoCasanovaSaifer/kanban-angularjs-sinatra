@@ -8,7 +8,7 @@ myApp.controller('ProjectSelectionCtrl', function($scope, $rootScope, webService
 	$scope.currentProject = $routeParams.project_name;
 	$scope.showProjetoSelection = true;
 
-	console.log($routeParams);
+	//console.log($routeParams);
 	$scope.projects = webServiceStorage.Project.query(function(data) {
 		for (i = 0; i < data.length; i++) {
 			var value = data[i];
@@ -67,9 +67,9 @@ myApp.controller('ProjectSelectionCtrl', function($scope, $rootScope, webService
 	$scope.$watch(function() {
 		return $location.path()
 	}, function() {
-		console.log($location);
-		console.log($scope.$route.current);
-		console.log($scope.$routeParams);
+		//console.log($location);
+		//console.log($scope.$route.current);
+		//console.log($scope.$routeParams);
 		$scope.projects = webServiceStorage.Project.query();
 
 	});
@@ -79,8 +79,37 @@ myApp.controller('ProjectSelectionCtrl', function($scope, $rootScope, webService
 	}
 });
 
-myApp.controller('KanbanCtrl', function($scope, $routeParams, $rootScope, $location, localStorageService, webServiceStorage, $q) {
+myApp.controller('KanbanCtrl', function($scope, $routeParams, $rootScope, $location, localStorageService, webServiceStorage, $q, $parse) {
 	$scope.templateFromWebService = webServiceStorage.KanbanTemplate.get();
+
+$scope.taskUpdated = function(targetIdentity, moveData) {
+		for(var i=0; i < moveData.origin.length ; i++ ){
+			var task = moveData.origin[i];
+			task.seq = i;
+			task.id = task._id;
+			var taskData = new $scope.TaskResource(task);
+			taskData.$save();
+		}
+		//console.log(moveData.origin);
+}
+	$scope.taskMoved = function(targetIdentity, moveData) {
+		//console.log(moveData);
+		//console.log(targetIdentity);
+
+		var task = moveData.dest[moveData.destPosition];
+		var origIdentity = task.status_id;
+		//alterar todas as tasks a partir da task movida até o fim da lista algo
+		
+		task.id = task._id;
+		task.status_id = targetIdentity;
+		task.destPosition = moveData.destPosition;
+		var taskData = new $scope.TaskResource(task);
+		taskData.$reArrange(function() {
+			//reorganiza a lista de origem do elemento movido
+		 	var taskData = new $scope.TaskResource({id: task._id, status_id: origIdentity, originPosition: moveData.origPosition});
+		 	taskData.$reArrangeOrigin();
+		});
+	};
 
 	$scope.getCurrentKanban = function() {
 		return $scope.kanban;
@@ -174,9 +203,8 @@ myApp.controller('KanbanCtrl', function($scope, $routeParams, $rootScope, $locat
 
 
 	$scope.deleteItem = function(column, index) {
-		var task = new $scope.TaskResource({id: column.tasks[index]._id});
-		console.log(task);
-		task.$remove(function(){
+		var taskData = new $scope.TaskResource({id: column.tasks[index]._id});
+		taskData.$remove(function(){
 			column.tasks.splice(index, 1);
 		});
 	};

@@ -116,7 +116,7 @@
                     <span ng-show="showControlEnterTip(status) && controlEnterTipEnabled" class="label label-info">Pressione Control+Enter após digitar o texto para adicionar a atividade</span>
                     <input class="btn btn-info" type="submit" value="Adicionar" />
       </form>
-        <div class="task-list-template1 grupo-items" ui-multi-sortable ng-model="kanban" model-subset="status[{{$index}}].tasks">
+        <div class="task-list-template1 grupo-items" ui-multi-sortable ng-model="kanban" status_id="{{status._id}}" model-subset="status[{{$index}}].tasks" model-identity="status._id">
                     <div class="thumbnail kanban-item" ng-repeat="task in status.tasks">
                     <i class="close icon-remove pull-right" ng-click="deleteItem(status,$index)"></i>
                     <a href="#editModal" data-toggle="modal" ng-click="setCurrentEditingTask(status,$index)"><i class="close icon-pencil pull-right"></i></a>

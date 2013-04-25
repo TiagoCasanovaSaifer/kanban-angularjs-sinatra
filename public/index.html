@@ -175,10 +175,9 @@
 
 <script type="text/ng-template"  id="projectSelection.html">
  <div class="container container-entrada">
-
-
       <div ng-show="showProjetoSelection">
         <form ng-submit="addNewProject()" class="form-entrada">
+        <h2 class="kanban-title text-center">KANBAN DESDR</h2>
           <fieldset>
             <label>Informe o projeto você deseja acessar?</label>
             <select ng-focus="showProjetoSelection" ng-model="currentProject" type="text" ng-options="p.name as p.name for p in projects" ng-change="projectChanged()">
@@ -197,6 +196,7 @@
       </div>
       <div ng-hide="showProjetoSelection">
         <form ng-submit="addNewKanban()"  class="form-entrada">
+        <h2 class="kanban-title text-center">KANBAN DESDR</h2>
           <fieldset>
             <label>Projeto<label>
             <input type='text' ng-model="currentProject" disabled>

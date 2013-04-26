@@ -31,7 +31,11 @@ get '/project_template' do
 end
 
 get '/kanban_template' do
+  if(Project.default_template)
   Project.default_template.kanbans[0].to_json(:except => ["_id", "tasks"], :include => {:status => {:include => :tasks}})
+else
+  {}.to_json
+end
 end
 
 #PROJECT OPERATIONS

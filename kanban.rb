@@ -8,6 +8,9 @@ class Project
   field :type, type: String, :default => 'project'
   embeds_many :kanbans
 
+  validates_uniqueness_of :name
+  validates_presence_of :name
+
   def self.default_template
     self.find_by(name: 'default_template')
   end
@@ -34,6 +37,10 @@ class Kanban
   embedded_in :Project
   embeds_many :status
   has_many :tasks
+
+  validates_uniqueness_of :name
+  validates_presence_of :name
+
   def to_json(options={})
     super(options.merge({:include => :tasks}))
   end

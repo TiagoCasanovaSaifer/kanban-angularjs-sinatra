@@ -1,4 +1,4 @@
-var myApp = angular.module('myApp', ['ngView','ngResource', 'ui']);
+var myApp = angular.module('myApp', ['ngView','ngResource', 'ui', 'ngDragDrop']);
  
   // configure html5 to get links working on jsfiddle
   //$locationProvider.html5Mode(true);

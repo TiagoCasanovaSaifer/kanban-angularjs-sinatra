@@ -15,7 +15,12 @@
 <!--script src="http://jashkenas.github.com/coffee-script/extras/coffee-script.js"></script-->
 <script src="js/lib/angular.min.js"></script>
 <script src="js/lib/angular-resource.js"></script>
+
+<script src="js/lib/angular-dragdrop.js"></script>
+
+
 <script src="js/lib/angular-ui.js"></script>    
+
 
 <script src="js/lib/angular-multiSortable.js"></script>
 <link href="css/style.css" rel="stylesheet" type="text/css" />
@@ -31,38 +36,6 @@
 <title>Kanban</title>
 
 <meta name="viewport" content="width=device-width, user-scalable=no" />
-<style>
-.container-entrada {
-  padding-top: 90px;
-}
-.form-entrada {
-        max-width: 340px;
-        padding: 19px 29px 29px;
-        margin: 0 auto 20px;
-        background-color: #fff;
-        border: 1px solid #e5e5e5;
-        -webkit-border-radius: 5px;
-           -moz-border-radius: 5px;
-                border-radius: 5px;
-        -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
-           -moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
-                box-shadow: 0 1px 2px rgba(0,0,0,.05);
-      }
-      .form-entrada .form-entrada-heading,
-      .form-entrada .checkbox {
-        margin-bottom: 10px;
-      }
-
-      .form-entrada input {
-        width:300px;
-      }
-
-      form-entrada select {
-        width: 320px;
-      }
-     
-
-</style>
 </head>
 <body>
 <script type="text/ng-template"  id="kanban.html">
@@ -71,7 +44,16 @@
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
         <div class="container">
-        <a class="brand" href="#/projeto/{{projectName}}">{{projectName}} / {{kanban.name}}</a>
+        <span class="pull-left brand"><a class="kanban-title pull-left" style="color:white;font-size:16px;" href="/">KANBAN DESDR :::</a> </span>        <div class="color_select pull-left">
+          <div class="color_badge yellow" ng-model="colorYellow" ng-init="colorYellow='yellow'" data-drag="true" data-jqyoui-options="{revert: invalid}" jqyoui-draggable="{'color':'yellow', placeholder:'keep',animate:true, onStart:'colorDragStart', onStop: 'colorDragStop', onDrag: 'colorDragCallback'}" data-color="yellow"></div>
+          <div class="color_badge gold"  ng-model="collorGold" ng-init="collorGold='gold'" data-drag="true" data-jqyoui-options="{revert: invalid}" jqyoui-draggable="{color: 'gold', placeholder:'keep',animate:true, onStart:'colorDragStart', onStop: 'colorDragStop', onDrag: 'colorDragCallback'}" data-color="gold"></div>
+          <div class="color_badge green"  ng-model="colorGreen" ng-init="colorGreen='green'" data-drag="true" data-jqyoui-options="{revert: 'invalid'}" jqyoui-draggable="{color: 'green',placeholder:'keep',animate:true, onStart:'colorDragStart', onStop: 'colorDragStop', onDrag: 'colorDragCallback'}" data-color="green"></div>
+          <div class="color_badge cloud"  ng-model="colorCloud" ng-init="colorCloud='cloud'" data-drag="true" data-jqyoui-options="{revert: 'invalid'}" jqyoui-draggable="{color: 'cloud',placeholder:'keep',animate:true, onStart:'colorDragStart', onStop: 'colorDragStop', onDrag: 'colorDragCallback'}" data-color="cloud"></div>
+          
+          <div class="color_badge red" ng-model="colorRed" ng-init="colorRed='red'"   data-drag="true" data-jqyoui-options="{revert: 'invalid'}" jqyoui-draggable="{color: 'red',placeholder:'keep',animate:true, onStart:'colorDragStart', onStop: 'colorDragStop', onDrag: 'colorDragCallback'}" data-color="red"></div>
+        </div>
+        <div class="pull-right" style="color:white;padding-top:10px">| Projeto: <a  style="font-size:14px" href="#/projeto/{{projectName}}">{{projectName}}</a> ( <span class="text-warning">{{kanban.name}}</span> )</div>
+
         <div class="nav-collapse collapse navbar-responsive-collapse">
                     <ul class="nav">
                       <li class="dropdown">
@@ -117,11 +99,11 @@
                     <input class="btn btn-info" type="submit" value="Adicionar" />
       </form>
         <div class="task-list-template1 grupo-items" ui-multi-sortable ng-model="kanban" status_id="{{status._id}}" model-subset="status[{{$index}}].tasks" model-identity="status._id">
-                    <div class="thumbnail kanban-item" ng-repeat="task in status.tasks">
-                    <i class="close icon-remove pull-right" ng-click="deleteItem(status,$index)"></i>
-                    <a href="#editModal" data-toggle="modal" ng-click="setCurrentEditingTask(status,$index)"><i class="close icon-pencil pull-right"></i></a>
-                    <p class="pull-right indicador-sequencial">#{{$index+1}}</p>
-                    <p ng-bind-html-unsafe="task.text | newlines"></p>
+                    <div  class="thumbnail kanban-item {{task.color}}" ng-model="taskColor" ng-repeat="task in status.tasks" data-drop="true"  jqyoui-droppable="{color: '', onDrop:'dropColorCallback'}">
+                        <i class="close icon-remove pull-right" ng-click="deleteItem(status,$index)"></i>
+                        <a href="#editModal" data-toggle="modal" ng-click="setCurrentEditingTask(status,$index)"><i class="close icon-pencil pull-right"></i></a>
+                        <p class="pull-right indicador-sequencial">#{{$index+1}}</p>
+                        <p ng-bind-html-unsafe="task.text | newlines"></p>
                     </div>
                     
           </div>
@@ -187,9 +169,9 @@
 
           </fieldset>
           
-            <input class="span2" type='text' ng-required ng-model="novoProjeto" placeholder/>
+            <input class="span2" type='text' required="true" ng-model="novoProjeto" placeholder/>
             <div class="text-center">
-              <button class='btn text-center' type='submit'>Criar Projeto</button>
+              <button class='btn-large btn-primary text-center' type='submit'>Criar Projeto</button>
             </div>
           
         </form>
@@ -209,12 +191,11 @@
           
           <div class="box">
             <label>Informe o nome do Kanban</label>
-            <input type='text' ng-required ng-model="novoKanban" placeholder="ex: 'Iteração 1'" ng-focus="!showProjetoSelection"/>
+            <input type='text' required="true" ng-model="novoKanban" placeholder="ex: 'Iteração 1'" ng-focus="!showProjetoSelection"/>
           </div>
           <div class="pagination-centered">
             <button class='btn-large btn-primary' type='submit'>Criar Kanban</button>
           </div>
-          <hr/>
           <div class="pull-right">
             <a ng-click='retornar()'>Retornar</a>
           </div>

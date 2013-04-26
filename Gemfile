@@ -24,3 +24,9 @@ group :development do
   gem 'rvm-capistrano'
   gem 'cap-recipes' #https://github.com/nesquena/cap-recipes
 end
+
+
+group :test do
+	gem'rspec'
+	gem 'mongoid-rspec'
+end

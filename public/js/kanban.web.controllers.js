@@ -233,10 +233,33 @@ $scope.taskUpdated = function(targetIdentity, moveData) {
 	};
 
 	$scope.changeTaskText = function() {
-		console.log($scope);
 		var task = new $scope.TaskResource($scope.currentEditingTask);
 		task.$save(function(){
 			$scope.currentEditingColumn.tasks[$scope.currentEditingIndex].text = $scope.currentEditingTask.text;
 		});
+	}
+
+	$scope.color = {};
+
+	$scope.colorDrop = {};
+
+
+	$scope.dropColorCallback = function(event, ui, scope) {
+		scope.task.color = scope.taskColor;
+		scope.task.id = scope.task._id;
+		var taskData = new $scope.TaskResource(scope.task);
+		taskData.$save();
+	}
+
+	$scope.colorDragStart = function() {
+
+	}
+
+	$scope.colorDragStop = function() {
+
+	}
+
+	$scope.colorDragCallback = function() {
+
 	}
 });

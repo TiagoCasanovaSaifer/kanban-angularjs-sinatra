@@ -16,13 +16,13 @@
 <script src="js/lib/angular.min.js"></script>
 <script src="js/lib/angular-resource.js"></script>
 
-<script src="js/lib/angular-dragdrop.js"></script>
+<script src="js/angular-dragdrop.js"></script>
 
 
 <script src="js/lib/angular-ui.js"></script>    
 
 
-<script src="js/lib/angular-multiSortable.js"></script>
+<script src="js/angular-multiSortable.js"></script>
 <link href="css/style.css" rel="stylesheet" type="text/css" />
 
 
@@ -45,8 +45,8 @@
       <div class="navbar-inner">
         <div class="container">
         <span class="pull-left brand"><a class="kanban-title pull-left" style="color:white;font-size:16px;" href="/">KANBAN DESDR :::</a> </span>        <div class="color_select pull-left">
-          <div class="color_badge yellow" ng-model="colorYellow" ng-init="colorYellow='yellow'" data-drag="true" data-jqyoui-options="{revert: invalid}" jqyoui-draggable="{'color':'yellow', placeholder:'keep',animate:true, onStart:'colorDragStart', onStop: 'colorDragStop', onDrag: 'colorDragCallback'}" data-color="yellow"></div>
-          <div class="color_badge gold"  ng-model="collorGold" ng-init="collorGold='gold'" data-drag="true" data-jqyoui-options="{revert: invalid}" jqyoui-draggable="{color: 'gold', placeholder:'keep',animate:true, onStart:'colorDragStart', onStop: 'colorDragStop', onDrag: 'colorDragCallback'}" data-color="gold"></div>
+          <div class="color_badge yellow" ng-model="colorYellow" ng-init="colorYellow='yellow'" data-drag="true" data-jqyoui-options="{revert: 'invalid'}" jqyoui-draggable="{'color':'yellow', placeholder:'keep',animate:true, onStart:'colorDragStart', onStop: 'colorDragStop', onDrag: 'colorDragCallback'}" data-color="yellow"></div>
+          <div class="color_badge gold"  ng-model="collorGold" ng-init="collorGold='gold'" data-drag="true" data-jqyoui-options="{revert: 'invalid'}" jqyoui-draggable="{color: 'gold', placeholder:'keep',animate:true, onStart:'colorDragStart', onStop: 'colorDragStop', onDrag: 'colorDragCallback'}" data-color="gold"></div>
           <div class="color_badge green"  ng-model="colorGreen" ng-init="colorGreen='green'" data-drag="true" data-jqyoui-options="{revert: 'invalid'}" jqyoui-draggable="{color: 'green',placeholder:'keep',animate:true, onStart:'colorDragStart', onStop: 'colorDragStop', onDrag: 'colorDragCallback'}" data-color="green"></div>
           <div class="color_badge cloud"  ng-model="colorCloud" ng-init="colorCloud='cloud'" data-drag="true" data-jqyoui-options="{revert: 'invalid'}" jqyoui-draggable="{color: 'cloud',placeholder:'keep',animate:true, onStart:'colorDragStart', onStop: 'colorDragStop', onDrag: 'colorDragCallback'}" data-color="cloud"></div>
           

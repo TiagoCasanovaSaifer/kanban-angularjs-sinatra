@@ -37,9 +37,9 @@ body {
 .kanban-title {
     /*font-family: 'Sofadi One', cursive;*/
     font-family: 'Shojumaru', cursive;
-    font-size: 32px;
+    font-size: 28px;
     color:#444;
-    width: 221px;
+    width: 341px;
 }
 
 .indicador-sequencial {

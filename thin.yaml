@@ -1,0 +1,8 @@
+--- 
+pid: tmp/pids/thin.pid
+log: log/thin.log
+timeout: 60
+port: 3838
+environment: production
+servers: 3
+address: 0.0.0.0

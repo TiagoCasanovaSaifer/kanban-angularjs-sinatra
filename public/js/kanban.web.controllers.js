@@ -245,10 +245,13 @@ $scope.taskUpdated = function(targetIdentity, moveData) {
 
 
 	$scope.dropColorCallback = function(event, ui, scope) {
-		scope.task.color = scope.taskColor;
-		scope.task.id = scope.task._id;
-		var taskData = new $scope.TaskResource(scope.task);
-		taskData.$save();
+		if(ui.draggable.hasClass('color_badge'))
+		{
+			scope.task.color = scope.taskColor;
+			scope.task.id = scope.task._id;
+			var taskData = new $scope.TaskResource(scope.task);
+			taskData.$save();
+		}
 	}
 
 	$scope.colorDragStart = function() {

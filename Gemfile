@@ -14,7 +14,7 @@ platforms :ruby do
 end
 
 platforms :jruby do
-	gem 'trinidad'
+#	gem 'trinidad'
 end
 
 group :development do

@@ -1,5 +1,7 @@
 # Disable Rake-environment-task framework detection by uncommenting/setting to false
-# Warbler.framework_detection = false
+Warbler.framework_detection = false
+
+
 
 # Warbler web application assembly configuration file
 Warbler::Config.new do |config|
@@ -8,7 +10,7 @@ Warbler::Config.new do |config|
   # - gemjar: package the gem repository in a jar file in WEB-INF/lib
   # - executable: embed a web server and make the war executable
   # - compiled: compile .rb files to .class files
-  config.features = %w(gemjar executable compiled)
+  config.features = %w(gemjar runnable executable compiled)
 
   # Application directories to be included in the webapp.
   #config.dirs = %w(app config lib log vendor tmp)
@@ -120,7 +122,7 @@ Warbler::Config.new do |config|
   # * <tt>winstone</tt> (default) - Winstone 0.9.10 from sourceforge
   # * <tt>jenkins-ci.winstone</tt> - Improved Winstone from Jenkins CI
   # * <tt>jetty</tt> - Embedded Jetty from Eclipse
-  # config.webserver = 'jetty'
+  config.webserver = 'jetty'
 
   # Value of RAILS_ENV for the webapp -- default as shown below
   # config.webxml.rails.env = ENV['RAILS_ENV'] || 'production'
@@ -129,7 +131,8 @@ Warbler::Config.new do |config|
   # config.webxml.booter = :rails
 
   # Set JRuby to run in 1.9 mode.
-  # config.webxml.jruby.compat.version = "1.9"
+  config.webxml.jruby.compat.version = "1.9"
+  config.webxml.jruby.cext.enabled = true
 
   # When using the :rack booter, "Rackup" script to use.
   # - For 'rackup.path', the value points to the location of the rackup

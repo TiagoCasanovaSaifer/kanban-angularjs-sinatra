@@ -8,13 +8,11 @@ gem 'mongoid-autoinc', "~>0.3.0"
 #gem "yajl-ruby", "~> 1.1.0"
 gem 'sinatra'
 gem 'sinatra-contrib'
+gem 'sinatra-websocket'
+
 
 platforms :ruby do
-	gem 'thin'
-end
-
-platforms :jruby do
-#	gem 'trinidad'
+  gem 'thin'
 end
 
 group :development do
@@ -23,10 +21,15 @@ group :development do
   gem 'capistrano_colors',  '~> 0.5.3', :require => nil
   gem 'rvm-capistrano'
   gem 'cap-recipes' #https://github.com/nesquena/cap-recipes
+  gem 'warbler'#, :git => "https://github.com/jruby/warbler.git"
+
 end
 
+platforms :jruby do
+  #gem 'trinidad'
+end
 
 group :test do
-	gem'rspec'
-	gem 'mongoid-rspec'
+  gem'rspec'
+  gem 'mongoid-rspec'
 end

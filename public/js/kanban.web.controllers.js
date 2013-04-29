@@ -37,9 +37,10 @@ myApp.controller('ProjectSelectionCtrl', function($scope, $rootScope, webService
 
 	$scope.kanbanChanged = function() {
 		var KanbanResource = webServiceStorage.Kanban($scope.currentProject);
-		var kanban = KanbanResource.get({kanbanId: $scope.currentKanban._id})
-		webServiceStorage.setLastKanban(kanban);
-		$location.path('projeto/' + $scope.currentProject + "/" + $scope.currentKanban._id);
+		var kanban = KanbanResource.get({kanbanId: $scope.currentKanban._id}, function(kanban) {
+			webServiceStorage.setLastKanban(kanban);
+			$location.path('projeto/' + $scope.currentProject + "/" + $scope.currentKanban._id);
+		})
 	};
 
 	$scope.addNewProject = function() {
@@ -79,26 +80,63 @@ myApp.controller('ProjectSelectionCtrl', function($scope, $rootScope, webService
 	}
 });
 
-myApp.controller('KanbanCtrl', function($scope, $routeParams, $rootScope, $location, localStorageService, webServiceStorage, $q, $parse) {
+myApp.controller('KanbanCtrl', function($scope, $filter, $routeParams, $rootScope, kanbanRefreshService, $location, localStorageService, webServiceStorage, $q, $parse) {
 	$scope.templateFromWebService = webServiceStorage.KanbanTemplate.get();
 
-$scope.taskUpdated = function(targetIdentity, moveData) {
+	
+
+	$scope.taskUpdated = function(targetIdentity, moveData) {
 		for(var i=0; i < moveData.origin.length ; i++ ){
 			var task = moveData.origin[i];
 			task.seq = i;
 			task.id = task._id;
 			var taskData = new $scope.TaskResource(task);
-			taskData.$save();
+			
+			taskData.$save(function(){
+				if(moveData != null && moveData.origin.length > 0) {
+					var status_id = moveData.origin[0].status_id;
+					kanbanRefreshService.sendMessage({
+							type: 'status',
+							project_name: $scope.projectName, 
+							kanban_id: $scope.kanban._id,
+							status_id: status_id
+					});
+				}
+			});
 		}
+		
 		//console.log(moveData.origin);
-}
+	}
 	$scope.taskMoved = function(targetIdentity, moveData) {
 		//console.log(moveData);
 		//console.log(targetIdentity);
 
 		var task = moveData.dest[moveData.destPosition];
 		var origIdentity = task.status_id;
-		//alterar todas as tasks a partir da task movida até o fim da lista algo
+		
+		function enviarMsgAtualizacao() {
+			var statusOrigem = $filter('getBy')('tasks', $scope.kanban.status, moveData.origin);
+			var statusDestino = $filter('getBy')('tasks', $scope.kanban.status, moveData.dest);
+			console.log(status);
+			
+			if(statusOrigem != null) {
+				kanbanRefreshService.sendMessage({
+						type: 'status',
+						project_name: $scope.projectName, 
+						kanban_id: $scope.kanban._id,
+						status_id: statusOrigem._id
+				});
+			}
+			if(statusDestino != null) {
+				kanbanRefreshService.sendMessage({
+						type: 'status',
+						project_name: $scope.projectName, 
+						kanban_id: $scope.kanban._id,
+						status_id: statusDestino._id
+				});
+			}
+		}
+		//alterar todas as tasks a partir da task movida até o fim da lista alvo
 		
 		task.id = task._id;
 		task.status_id = targetIdentity;
@@ -107,7 +145,7 @@ $scope.taskUpdated = function(targetIdentity, moveData) {
 		taskData.$reArrange(function() {
 			//reorganiza a lista de origem do elemento movido
 		 	var taskData = new $scope.TaskResource({id: task._id, status_id: origIdentity, originPosition: moveData.origPosition});
-		 	taskData.$reArrangeOrigin();
+		 	taskData.$reArrangeOrigin(enviarMsgAtualizacao);
 		});
 	};
 
@@ -137,9 +175,38 @@ $scope.taskUpdated = function(targetIdentity, moveData) {
 
 	var KanbanResource = webServiceStorage.Kanban($routeParams.project_name);
 
-	if($scope.kanban == null || $scope.kanban == undefined) {
-	 	$scope.kanban = KanbanResource.get({kanbanId: $routeParams.kanban_id})
+	function setupKanbanRefreshService() {
+		//configura o kanbanRefreshService para escutar atualizações do kanban corrente
+		kanbanRefreshService.setup($scope.kanban._id, function(data){
+			console.log(data);
+			console.log(typeof data);
+			if(typeof data === 'object'){
+				if(data.kanban_id == $scope.kanban._id) {
+					var status = $filter('getBy')('_id',$scope.kanban.status, data.status_id);
+					if(data.type){
+						status.tasks = data.tasks;
+					} else {
+						var task = $filter('getBy')('_id', status.tasks, data.task._id);
+						var task_index = status.indexOf(task);
+						status[task_index] = data.task
+					}
+					$scope.$apply();
+				}
+			}
+		});
 	}
+
+	if($scope.kanban == null || $scope.kanban == undefined) {
+	 	$scope.kanban = KanbanResource.get({kanbanId: $routeParams.kanban_id}, function(){
+	 		setupKanbanRefreshService();
+	 	})
+	}
+	else {
+		console.log($scope.kanban._id);
+		setupKanbanRefreshService();
+	}
+
+	
 
 	if($rootScope.kanbans == null || $rootScope.kanbans == undefined) {
 		$rootScope.kanbans = webServiceStorage.Kanban($routeParams.project_name).query();
@@ -196,6 +263,13 @@ $scope.taskUpdated = function(targetIdentity, moveData) {
 			column.newTask = {
 				text: ""
 			};
+			console.log($scope);
+			kanbanRefreshService.sendMessage({
+				type: 'status',
+				project_name: $scope.projectName, 
+				kanban_id: $scope.kanban._id,
+				status_id: column._id
+			});
 		});
 	};
 
@@ -206,6 +280,12 @@ $scope.taskUpdated = function(targetIdentity, moveData) {
 		var taskData = new $scope.TaskResource({id: column.tasks[index]._id});
 		taskData.$remove(function(){
 			column.tasks.splice(index, 1);
+			kanbanRefreshService.sendMessage({
+				type: 'status',
+				project_name: $scope.projectName, 
+				kanban_id: $scope.kanban._id,
+				status_id: column._id
+			});
 		});
 	};
 
@@ -233,9 +313,17 @@ $scope.taskUpdated = function(targetIdentity, moveData) {
 	};
 
 	$scope.changeTaskText = function() {
-		var task = new $scope.TaskResource($scope.currentEditingTask);
-		task.$save(function(){
-			$scope.currentEditingColumn.tasks[$scope.currentEditingIndex].text = $scope.currentEditingTask.text;
+		var taskResource = new $scope.TaskResource($scope.currentEditingTask);
+		taskResource.$save(function(){
+			var task = $scope.currentEditingColumn.tasks[$scope.currentEditingIndex];
+			task.text = $scope.currentEditingTask.text;
+			kanbanRefreshService.sendMessage({
+					type: 'task',
+					project_name: $scope.projectName, 
+					kanban_id: task.kanban_id,
+					status_id: task.status_id,
+					task_id: task.id
+				});
 		});
 	}
 
@@ -244,13 +332,21 @@ $scope.taskUpdated = function(targetIdentity, moveData) {
 	$scope.colorDrop = {};
 
 
-	$scope.dropColorCallback = function(event, ui, scope) {
+	$scope.dropColorCallback = function(event, ui, taskScope) {
 		if(ui.draggable.hasClass('color_badge'))
 		{
-			scope.task.color = scope.taskColor;
-			scope.task.id = scope.task._id;
-			var taskData = new $scope.TaskResource(scope.task);
-			taskData.$save();
+			taskScope.task.color = taskScope.taskColor;
+			taskScope.task.id = taskScope.task._id;
+			var taskData = new $scope.TaskResource(taskScope.task);
+			taskData.$save(function(){
+				kanbanRefreshService.sendMessage({
+					type: 'task',
+					project_name: $scope.projectName, 
+					kanban_id: taskScope.task.kanban_id,
+					status_id: taskScope.task.status_id,
+					task_id: taskScope.task.id
+				});
+			});
 		}
 	}
 

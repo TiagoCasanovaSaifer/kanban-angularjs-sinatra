@@ -128,3 +128,61 @@ myApp.factory('dropboxService', function($rootScope, $q) {
   return service;
 
 });
+
+
+
+//serviço que inicializa um canal websocket para receber atualizações do kanban e para enviar notificações 
+//de mudanças do kanban para o servidor
+myApp.factory('kanbanRefreshService', ['$rootScope', '$location', function($rootScope, $location) {
+    // We return this object to anything injecting our service
+    var Service = {};
+    // Keep all pending requests here until they get responses
+    var serviceCallback = function(){};
+    // Create a unique callback ID to map requests to responses
+    var currentCallbackId = 0;
+    // Create our websocket object with the address to the websocket
+    var ws;
+
+    
+    function defineWs(kanban_id) {
+
+      if(ws != null && ws != undefined) {
+        ws.close();
+      }
+
+      console.log("Conectando Websocket em: " + "ws://" + $location.host() +":" +  $location.port() + "/socket/kanban_tasks_refresh/" + kanban_id);
+      ws = new WebSocket("ws://" + $location.host() +":" +  $location.port() + "/socket/kanban_tasks_refresh/" + kanban_id);
+
+      ws.onopen = function(){  
+         console.log("Socket has been opened!");  
+      };
+      
+      ws.onmessage = function(message) {
+          listener(message.data);
+      };
+
+    }
+
+    function sendRequest(request) {
+        ws.send(JSON.stringify(request));
+    };
+
+   
+    function listener(data) {
+      $rootScope.$apply(serviceCallback(JSON.parse(data)));
+    };
+   
+
+    //Inicializa o refresh service definindo o metódo de callback a ser chamado ao se receber mensagens do websocket
+    Service.setup = function(kanban_id, callback) {
+      defineWs(kanban_id);
+      serviceCallback = callback;
+    };
+
+    //envia mensagem para os outros clientes websocket
+    Service.sendMessage = function(requestMessage) {
+      sendRequest(requestMessage);
+    };
+
+    return Service;
+}]);

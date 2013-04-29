@@ -10,3 +10,16 @@ myApp.filter('noHTML', function() {
       .replace(/</g, '&lt;');
   }
 });
+
+
+myApp.filter('getBy', function() {
+  return function(field_name, input, id) {
+    var i=0, len=input.length;
+    for (; i<len; i++) {
+      if (input[i][field_name] === id) {
+        return input[i];
+      }
+    }
+    return null;
+  }
+});

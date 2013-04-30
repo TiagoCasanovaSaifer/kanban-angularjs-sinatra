@@ -22,5 +22,4 @@ production:
 production-heroku:
   sessions:
     default:
-      database: kanbans
       uri: <%= ENV['MONGOLAB_URI'] %>   

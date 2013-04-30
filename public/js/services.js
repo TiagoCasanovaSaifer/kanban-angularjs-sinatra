@@ -129,6 +129,39 @@ myApp.factory('dropboxService', function($rootScope, $q) {
 
 });
 
+//factory para integração com socket.io
+// Demonstrate how to register services
+// In this case it is a simple value service.
+myApp.factory('socket', ['$rootScope', '$location', function ($rootScope, $location) {
+    var socket = io.connect('http://' + $location.host() + ':3837');
+
+    return {
+      onconnect: function(callback) {
+        this.on('connect', callback);
+      },
+      ondisconnect: function(callback) {
+        this.on('disconnect', callback);
+      },
+      on: function (eventName, callback) {
+        socket.on(eventName, function () {  
+          var args = arguments;
+          $rootScope.$apply(function () {
+            callback.apply(socket, args);
+          });
+        });
+      },
+      emit: function (eventName, data, callback) {
+        socket.emit(eventName, data, function () {
+          var args = arguments;
+          $rootScope.$apply(function () {
+            if (callback) {
+              callback.apply(socket, args);
+            }
+          });
+        })
+      }
+    };
+  }]);
 
 
 //serviço que inicializa um canal websocket para receber atualizações do kanban e para enviar notificações 

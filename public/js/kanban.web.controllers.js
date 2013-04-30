@@ -362,3 +362,21 @@ myApp.controller('KanbanCtrl', function($scope, $filter, $routeParams, $rootScop
 
 	}
 });
+
+
+myApp.controller('SocketTestCtrl', function($scope, socket) {
+	socket.onconnect(function(args){
+		console.log(args);
+	});
+
+	socket.ondisconnect(function(args){
+		console.log(args);
+	});
+	$scope.enviarMensagem = function() {
+		socket.emit('message', $scope.mensagem);
+	}
+
+	socket.on('message', function(){
+		console.log(args);
+	});
+})

@@ -33,5 +33,6 @@ angular.module('ngView', [], function($routeProvider, $locationProvider) {
   $routeProvider.when('/', {controller: 'ProjectSelectionCtrl',  templateUrl: 'projectSelection.html'});
   $routeProvider.when("/projeto/:project_name", {controller: 'ProjectSelectionCtrl', templateUrl: 'projectSelection.html'});
   $routeProvider.when('/projeto/:project_name/:kanban_id', {controller: 'KanbanCtrl', templateUrl: 'kanban.html'})
+  $routeProvider.when('/socket', {controller: 'SocketTestCtrl', templateUrl: 'socket.html'})
 });
 //angular.bootstrap(document, ['myapp']);

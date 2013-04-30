@@ -6,13 +6,16 @@
   require './kanban.rb'
 
   #require "sinatra/reloader" if development?
-
+  
 
   class MyApp < Sinatra::Base
      helpers Sinatra::JSON
 
   set :bind, '0.0.0.0'
-  set :port, 3838
+  
+  BRIDGE = JSON.parse(IO.read("bridge.json"))
+
+  set :port, BRIDGE["rack_port"]
 
   set :server, 'thin'
   set :sockets, {}

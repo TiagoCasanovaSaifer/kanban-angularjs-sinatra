@@ -150,11 +150,11 @@ myApp.factory('kanbanRefreshService', ['$rootScope', '$location', function($root
         ws.close();
       }
 
-      console.log("Conectando Websocket em: " + "ws://" + $location.host() +":" +  $location.port() + "/socket/kanban_tasks_refresh/" + kanban_id);
+      //console.log("Conectando Websocket em: " + "ws://" + $location.host() +":" +  $location.port() + "/socket/kanban_tasks_refresh/" + kanban_id);
       ws = new WebSocket("ws://" + $location.host() +":" +  $location.port() + "/socket/kanban_tasks_refresh/" + kanban_id);
 
       ws.onopen = function(){  
-         console.log("Socket has been opened!");  
+         //console.log("Socket has been opened!");  
       };
       
       ws.onmessage = function(message) {

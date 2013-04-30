@@ -100,3 +100,6 @@ class Task
     self.seq = status.tasks.count
   end
 end
+
+#referencia de projetos uteis Mongoid
+#https://github.com/80beans/mongoid-autoinc

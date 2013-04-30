@@ -26,7 +26,9 @@
  *
  * (c) 2013 Amit Gharat a.k.a codef0rmer <amit.2006.it@gmail.com> - amitgharat.wordpress.com
  */
-
+/*
+http://codef0rmer.github.io/angular-dragdrop/#/
+*/
 var jqyoui = angular.module('ngDragDrop', []).service('ngDragDropService', ['$timeout', function($timeout) {
   this.callEventCallback = function (scope, callbackName, event, ui) {
     if (!callbackName) {

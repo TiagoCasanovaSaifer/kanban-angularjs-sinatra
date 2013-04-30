@@ -1,6 +1,8 @@
 source 'https://rubygems.org'
 source 'http://gemcutter.org'
 
+ruby "1.9.3"
+
 gem 'mongoid'
 gem "mongoid-nested-serialization"
 gem 'mongoid-autoinc', "~>0.3.0"

@@ -117,7 +117,7 @@ myApp.controller('KanbanCtrl', function($scope, $filter, $routeParams, $rootScop
 		function enviarMsgAtualizacao() {
 			var statusOrigem = $filter('getBy')('tasks', $scope.kanban.status, moveData.origin);
 			var statusDestino = $filter('getBy')('tasks', $scope.kanban.status, moveData.dest);
-			console.log(status);
+			//console.log(status);
 			
 			if(statusOrigem != null) {
 				kanbanRefreshService.sendMessage({
@@ -178,8 +178,8 @@ myApp.controller('KanbanCtrl', function($scope, $filter, $routeParams, $rootScop
 	function setupKanbanRefreshService() {
 		//configura o kanbanRefreshService para escutar atualizações do kanban corrente
 		kanbanRefreshService.setup($scope.kanban._id, function(data){
-			console.log(data);
-			console.log(typeof data);
+			//console.log(data);
+			//console.log(typeof data);
 			if(typeof data === 'object'){
 				if(data.kanban_id == $scope.kanban._id) {
 					var status = $filter('getBy')('_id',$scope.kanban.status, data.status_id);
@@ -202,7 +202,7 @@ myApp.controller('KanbanCtrl', function($scope, $filter, $routeParams, $rootScop
 	 	})
 	}
 	else {
-		console.log($scope.kanban._id);
+		//console.log($scope.kanban._id);
 		setupKanbanRefreshService();
 	}
 
@@ -263,7 +263,7 @@ myApp.controller('KanbanCtrl', function($scope, $filter, $routeParams, $rootScop
 			column.newTask = {
 				text: ""
 			};
-			console.log($scope);
+			//console.log($scope);
 			kanbanRefreshService.sendMessage({
 				type: 'status',
 				project_name: $scope.projectName, 

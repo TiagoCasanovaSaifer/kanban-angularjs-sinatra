@@ -18,3 +18,9 @@ production:
       database: kanbans
       hosts:
         - localhost:27017
+
+production-heroku:
+  sessions:
+    default:
+      database: kanbans
+      uri: <%= ENV['MONGOLAB_URI'] %>   

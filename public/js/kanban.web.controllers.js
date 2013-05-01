@@ -333,6 +333,7 @@ myApp.controller('KanbanCtrl', function($scope, $filter, $routeParams, $rootScop
 
 
 	$scope.dropColorCallback = function(event, ui, taskScope) {
+		
 		if(ui.draggable.hasClass('color_badge'))
 		{
 			taskScope.task.color = taskScope.taskColor;
@@ -365,6 +366,7 @@ myApp.controller('KanbanCtrl', function($scope, $filter, $routeParams, $rootScop
 
 
 myApp.controller('SocketTestCtrl', function($scope, socket) {
+	$scope.socket_data = [];
 	socket.onconnect(function(args){
 		console.log(args);
 	});
@@ -378,6 +380,7 @@ myApp.controller('SocketTestCtrl', function($scope, socket) {
 
 	socket.on('kanban-refresh', function(){
 		console.log(arguments);
+		$scope.socket_data.push(arguments);
 	});
 
 	socket.emit('registerToKanbanChannel', {kanban_id: 2});

@@ -1,6 +1,6 @@
 var fs = require("fs");
 var env = JSON.parse(fs.readFileSync("bridge.json").toString());
-var io = require("socket.io").listen(env.stream_port, "0.0.0.0");
+var io = require("socket.io").listen(parseInt(process.env.PORT) || env.stream_port);
 var http = require("http");
 
 io.configure(function () { 
@@ -26,6 +26,7 @@ io.sockets.on('connection', function(sock) {
 
   sock.on('kanban-refresh', function(data){
      console.log(data);
+      sock.emit('kanban-refresh', data);
       sock.broadcast.to(data.kanban_id).emit('kanban-refresh', data);
   });
 });

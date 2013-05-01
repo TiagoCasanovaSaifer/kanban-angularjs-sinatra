@@ -15,8 +15,7 @@
   
   BRIDGE = JSON.parse(IO.read("bridge.json"))
 
-  #set :port, BRIDGE["rack_port"]
-  set :port,  process.env.PORT || 3838
+  set :port, BRIDGE["rack_port"]
 
   set :server, 'thin'
   set :sockets, {}

@@ -373,10 +373,13 @@ myApp.controller('SocketTestCtrl', function($scope, socket) {
 		console.log(args);
 	});
 	$scope.enviarMensagem = function() {
-		socket.emit('message', $scope.mensagem);
+		socket.emit('kanban-refresh', {kanban_id: 2, text: $scope.mensagem});
 	}
 
-	socket.on('message', function(){
-		console.log(args);
+	socket.on('kanban-refresh', function(){
+		console.log(arguments);
 	});
+
+	socket.emit('registerToKanbanChannel', {kanban_id: 2});
+
 })

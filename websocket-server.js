@@ -11,16 +11,22 @@ io.configure(function () {
 io.sockets.on('connection', function(sock) {
   console.log('new client connected');
 
+  sock.on('registerToKanbanChannel', function(data){
+    var kanban_room = data.kanban_id;
+    sock.room = kanban_room;
+    sock.join(kanban_room);
+  });
+
+ 
+
   sock.on('disconnect', function(){
     console.log('disconnect');
     sock.leave(sock.room);
   });
 
   sock.on('kanban-refresh', function(data){
-     var kanban_room = data.kanban_id;
-      sock.room = kanban_room;
-      sock.join(kanban_room)
-      sock.broadcast.to(kanban_room).emit('kanban-refresh', data);
+     console.log(data);
+      sock.broadcast.to(data.kanban_id).emit('kanban-refresh', data);
   });
 });
 

@@ -13,9 +13,7 @@
 
   set :bind, '0.0.0.0'
   
-  BRIDGE = JSON.parse(IO.read("bridge.json"))
-
-  #set :port, BRIDGE["rack_port"]
+  #set :port, BRIDGE["rack_port"] unless ARGV["-p"]
 
   set :server, 'thin'
   set :sockets, {}

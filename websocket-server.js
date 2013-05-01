@@ -1,6 +1,6 @@
 var fs = require("fs");
-var env = JSON.parse(fs.readFileSync("bridge.json").toString());
-var io = require("socket.io").listen(env.stream_port);
+
+var io = require("socket.io").listen(3837);
 var http = require("http");
 
 io.configure(function () { 

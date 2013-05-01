@@ -133,8 +133,8 @@ myApp.factory('dropboxService', function($rootScope, $q) {
 // Demonstrate how to register services
 // In this case it is a simple value service.
 myApp.factory('socket', ['$rootScope', '$location', function ($rootScope, $location) {
-    var socket = io.connect('http://' + $location.host() + ':3837');
-
+    //var socket = io.connect('http://' + $location.host() + ':3837');
+    var socket = io.connect('http://kanban-websocket-server.herokuapp.com/');
     return {
       onconnect: function(callback) {
         this.on('connect', callback);

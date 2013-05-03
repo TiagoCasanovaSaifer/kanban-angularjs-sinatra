@@ -6,6 +6,11 @@ class RootController < KanbanWebApp::BaseController
     erb :index
   end
 
+  get '/index.html' do
+    content_type 'text/html', :charset => 'utf-8'
+    erb :index
+  end
+
   # get '/' do
   # 	redirect 'index.html'
   # end

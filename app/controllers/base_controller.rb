@@ -9,6 +9,8 @@ module KanbanWebApp
   set :server, 'thin'
   set :static, true
 
+  enable  :logging#, :sessions
+
    before do
     content_type :json
   end

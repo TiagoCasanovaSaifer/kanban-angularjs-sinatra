@@ -1,0 +1,82 @@
+<!doctype html ng-app="myApp">
+<!--[if lt IE 7 ]><html class="ie ie6" lang="en"  ng-app="myApp" id="ng-app"> <![endif]-->
+<!--[if IE 7 ]><html class="ie ie7" lang="en" ng-app="myApp" id="ng-app"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="en"  ng-app="myApp" id="ng-app"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--><html lang="en" ng-app="myApp"> <!--<![endif]-->
+<head>
+  <!-- Basic Page Needs
+  ================================================== -->
+  <meta charset="utf-8">
+  
+<meta charset=utf-8 />
+<title>Kanban - <%= KanbanWebApp.environment %></title>
+  <meta name="description" content="Kanban HTML5 - SERPRO - DESDR - by Ábner Oliveira" />
+  <meta name="keywords" content="Kanban, Web, HTML5">
+  <meta name="author" content="Ábner Silva de Oliveira" />
+
+  <!-- Mobile Specific Metas
+  ================================================== -->
+<meta name="viewport" content="width=device-width, user-scalable=no" />
+
+  <!-- CSS
+  ================================================== -->
+
+
+
+<link href="css/lib/bootstrap.css" rel="stylesheet" type="text/css" />
+<link href="css/lib/bootstrap-responsive.css" rel="stylesheet" type="text/css" />
+
+<link href="css/lib/angular-ui.css" rel="stylesheet" type="text/css" />
+<link href="css/style.css" rel="stylesheet" type="text/css" />
+
+<meta name="viewport" content="width=device-width, user-scalable=no" />
+</head>
+<body>
+  <script type="text/javascript">
+    window.kanban_environment = '<%=KanbanWebApp.environment  %>'
+  </script></script>
+  <%= yield %>
+
+  <!-- JS
+  ================================================== -->
+  <script src="js/lib/jquery.min.js"></script>
+<script src="js/lib/jquery-ui.min.js"></script>
+
+<script src="js/lib/jquery.ui.touch-punch.min.js"></script>
+<script src="js/lib/bootstrap.js"></script>
+<!--script src="http://jashkenas.github.com/coffee-script/extras/coffee-script.js"></script-->
+<script src="js/lib/angular.min.js"></script>
+<script src="js/lib/angular-resource.js"></script>
+
+<script src="js/angular-dragdrop.js"></script>
+
+
+<script src="js/lib/angular-ui.js"></script>    
+
+
+<script src="js/angular-multiSortable.js"></script>
+
+
+<% if "production-heroku".eql? KanbanWebApp.environment %>
+    <script src="http://kanban-websocket-server.herokuapp.com/socket.io/socket.io.js"></script>
+<% else %>
+  <script src="http://localhost:3837/socket.io/socket.io.js"></script>
+  <% end %>
+
+
+
+<script src="js/application.js"></script>
+<script src="js/kanban.web.controllers.js"></script>
+<script src="js/directives.js"></script>
+<script src="js/filters.js"></script>
+<script src="js/services.js"></script>
+
+<!--  <script src='/javascripts/vendor.js' type='text/javascript'></script>
+  <script src='/javascripts/application.js' type='text/javascript'></script>-->
+
+
+
+  <!-- End Document
+  ================================================== -->
+</body>
+</html>

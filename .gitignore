@@ -13,4 +13,4 @@ public/cache/**/*
 tmp/*
 vendor/**/**
 .rspec
-.jrubyrc
+.jrubyrc	

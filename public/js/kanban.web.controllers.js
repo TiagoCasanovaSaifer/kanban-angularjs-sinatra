@@ -148,6 +148,12 @@ myApp.controller('KanbanCtrl', function($scope, $filter, $routeParams, $rootScop
 		 	taskData.$reArrangeOrigin(enviarMsgAtualizacao);
 		});
 	};
+	
+	$scope.backlogTasks = [];
+	$scope.getBacklogTasks = function() {	
+		var statusTasksResource = webServiceStorage.StatusTasks($routeParams.project_name, $routeParams.kanban_id,$scope.getCurrentKanban().status[0]._id);
+				$scope.backlogTasks = statusTasksResource.query();
+	};
 
 	$scope.getCurrentKanban = function() {
 		return $scope.kanban;

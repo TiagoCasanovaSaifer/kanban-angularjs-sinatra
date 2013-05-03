@@ -16,6 +16,9 @@ myApp.factory('webServiceStorage', function($rootScope, $resource){
           reArrange: {method: 'POST', params: {rearrange: true, target: 'destination'}},
           reArrangeOrigin: {method: 'POST', params: {rearrange: true, target: 'origin'}},
         });
+    },
+    StatusTasks: function(name, kanbanId, statusId) {
+      return $resource('./project/:projectName/kanban/:kanbanId/status/:statusId/tasks', {projectName:name, kanbanId: kanbanId, statusId: statusId});
     }
     };
 
@@ -132,9 +135,12 @@ myApp.factory('dropboxService', function($rootScope, $q) {
 //factory para integração com socket.io
 // Demonstrate how to register services
 // In this case it is a simple value service.
-myApp.factory('socket', ['$rootScope', '$location', function ($rootScope, $location) {
-    //var socket = io.connect('http://' + $location.host() + ':3837');
-    var socket = io.connect('http://kanban-websocket-server.herokuapp.com/');
+myApp.factory('socket', ['$rootScope', '$location', '$window', function ($rootScope, $location, $window) {
+    var socket_io_address = 'http://' + $location.host() + ':3837';
+    if($window.kanban_environment == 'production-heroku') {
+      socket_io_address = 'http://kanban-websocket-server.herokuapp.com/';
+    }
+    var socket = io.connect(socket_io_address);
     return {
       onconnect: function(callback) {
         this.on('connect', callback);

@@ -48,3 +48,16 @@ describe Kanban do
 			expect{subject.kanbans.create!(name: "k1")}.to raise_error(Mongoid::Errors::Validations)
 	end
 end
+
+describe Task do
+	before(:each) do
+		Task.all.destroy
+	end
+
+	subject {Task.create(text: "")}
+
+	it { Task.should validate_presence_of(:status) }
+	it { Task.should validate_presence_of(:kanban) }
+	it { Task.should validate_presence_of(:text) }
+	it { Task.should validate_presence_of(:seq) }
+end

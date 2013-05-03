@@ -1,3 +1,3 @@
-require './app'
+require './kanban_boot'
 
-run MyApp.new
+run KanbanWebApp::Application.new

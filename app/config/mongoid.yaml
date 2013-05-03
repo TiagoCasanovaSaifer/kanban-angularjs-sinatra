@@ -1,0 +1,25 @@
+development:
+  sessions:
+    default:
+      database: kanbans
+      hosts:
+        - localhost:27017
+
+test:
+  sessions:
+    default:
+      database: kanbans-test
+      hosts:
+        - localhost:27017
+
+production:
+  sessions:
+    default:
+      database: kanbans
+      hosts:
+        - localhost:27017
+
+production-heroku:
+  sessions:
+    default:
+      uri: <%= ENV['MONGOLAB_URI'] %>   

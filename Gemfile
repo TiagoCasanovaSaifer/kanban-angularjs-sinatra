@@ -3,6 +3,9 @@ source 'http://gemcutter.org'
 
 ruby "1.9.3"
 
+gem 'rake'
+gem 'rack'
+
 gem 'mongoid'
 gem "mongoid-nested-serialization"
 gem 'mongoid-autoinc', "~>0.3.0"
@@ -11,8 +14,13 @@ gem 'mongoid-autoinc', "~>0.3.0"
 gem 'sinatra'
 gem 'sinatra-contrib'
 gem 'sinatra-websocket'
+gem 'emk-sinatra-url-for'
+gem 'sinatra-asset-snack'
 
 gem 'foreman'
+
+gem 'therubyracer'
+gem 'coffee-script'
 
 platforms :ruby do
   gem 'thin'
@@ -35,4 +43,8 @@ end
 group :test do
   gem'rspec'
   gem 'mongoid-rspec'
+  gem 'jasmine'
+  gem "guard-jasmine", "~> 1.15.1"
+  gem 'rack-asset-compiler'
 end
+

@@ -1,6 +1,5 @@
 var myApp = angular.module('myApp', ['ngView','ngResource', 'ui', 'ngDragDrop']);
- 
-  // configure html5 to get links working on jsfiddle
+   // configure html5 to get links working on jsfiddle
   //$locationProvider.html5Mode(true);
   
 /*.
@@ -35,4 +34,5 @@ angular.module('ngView', [], function($routeProvider, $locationProvider) {
   $routeProvider.when('/projeto/:project_name/:kanban_id', {controller: 'KanbanCtrl', templateUrl: 'kanban.html'})
   $routeProvider.when('/socket', {controller: 'SocketTestCtrl', templateUrl: 'socket.html'})
 });
+
 //angular.bootstrap(document, ['myapp']);

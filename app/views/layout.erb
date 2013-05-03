@@ -57,7 +57,7 @@
 <script src="js/angular-multiSortable.js"></script>
 
 
-<% if "production-heroku".eql? KanbanWebApp.environment %>
+<% if "production-heroku".eql?(KanbanWebApp.environment) %>
     <script src="http://kanban-websocket-server.herokuapp.com/socket.io/socket.io.js"></script>
 <% else %>
   <script src="http://localhost:3837/socket.io/socket.io.js"></script>

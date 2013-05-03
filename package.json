@@ -1,9 +1,0 @@
-{
-  "name": "kanban-server-websocket",
-  "description": "Websocket server para o Kanban-server",
-  "version": "0.0.1",
-  "private": true,
-  "dependencies": {
-    "socket.io": "0.9.x"
-  }
-}

@@ -48,3 +48,4 @@ group :test do
   gem 'rack-asset-compiler'
 end
 
+gem 'simplecov', :require => false, :group => :test

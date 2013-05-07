@@ -5,7 +5,7 @@ class Task
   field :text, type: String
   field :seq, type: Integer
 
-  validates_presence_of :kanban_id, :status_id#, :text, :seq
+  validates_presence_of :kanban_id, :status_id, :text
 
   before_create :assign_sequence
 

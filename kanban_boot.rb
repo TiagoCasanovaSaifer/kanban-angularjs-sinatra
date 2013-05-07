@@ -15,7 +15,7 @@ require 'json'
 require 'coffee-script'
 require 'mongoid'
 
-require 'lib/kanban'
+require 'lib/kanban_web_app'
 require 'app/controllers/base_controller'
 [
   'lib', 'app', 'app/controllers', 'app/models', 'app/config/initializers'

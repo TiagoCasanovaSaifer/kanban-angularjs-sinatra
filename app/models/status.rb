@@ -4,6 +4,8 @@ class Status
   field :name, type: String
   has_many :tasks,  :order => "seq ASC"
 
+  validates_presence_of :name
+
   def self.default_status_set
       ['Planejando (Backlog)', 'Projetando', 'Em Desenvolvimento', 'Testando', 'Entregue']
   end

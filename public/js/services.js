@@ -13,8 +13,7 @@ myApp.factory('webServiceStorage', function($rootScope, $resource){
     Task: function(name,kanbanId) {
       return $resource('./project/:projectName/kanban/:kanbanId/task/:taskId',  {projectName:name, kanbanId: kanbanId, taskId: '@id'},
         {
-          reArrange: {method: 'POST', params: {rearrange: true, target: 'destination'}},
-          reArrangeOrigin: {method: 'POST', params: {rearrange: true, target: 'origin'}},
+          move: {method: 'POST', params: {move: true}}
         });
     },
     StatusTasks: function(name, kanbanId, statusId) {

@@ -149,18 +149,17 @@ class RootController < KanbanWebApp::BaseController
   post '/project/:name/kanban/:kanban_id/task/:task_id' do |project_name, kanban_id, task_id|
     project = Project.find_by(name: project_name)
     if(project && kanban=project.kanbans.find(kanban_id))
-      task_attributes = JSON.parse(request.body.read.to_s)
-      
-      unless(params[:rearrange]) 
-        kanban.tasks.find(task_id).update_attributes(task_attributes)
+      data = JSON.parse(request.body.read.to_s)
+
+      unless(params[:move]) 
+        kanban.tasks.find(task_id).update_attributes(data)
       else
-        if "destination".eql?(params["target"])
-          kanban.status.find(task_attributes["status_id"]).reArrange(task_id, task_attributes)
-        else
-          kanban.status.find(task_attributes["status_id"]).reArrangeOrigin(task_attributes)
-        end
+        status_to= kanban.status.find(data["status_id"])
+        task = kanban.tasks.find(data["id"])
+        position_to = data["position"]
+        kanban.move_task(task, status_to, position_to)
       end
-      
+
       {result: 'ok'}.to_json
     else
       error 404, 'project/kanban not found'

@@ -83,15 +83,13 @@ myApp.controller('ProjectSelectionCtrl', function($scope, $rootScope, webService
 myApp.controller('KanbanCtrl', function($scope, $filter, $routeParams, $rootScope, kanbanRefreshService, $location, localStorageService, webServiceStorage, $q, $parse) {
 	$scope.templateFromWebService = webServiceStorage.KanbanTemplate.get();
 
-	
-
-	$scope.taskUpdated = function(targetIdentity, moveData) {
+	/*$scope.taskUpdated = function(targetIdentity, moveData) {
 		for(var i=0; i < moveData.origin.length ; i++ ){
 			var task = moveData.origin[i];
 			task.seq = i;
 			task.id = task._id;
 			var taskData = new $scope.TaskResource(task);
-			
+
 			taskData.$save(function(){
 				if(moveData != null && moveData.origin.length > 0) {
 					var status_id = moveData.origin[0].status_id;
@@ -104,21 +102,19 @@ myApp.controller('KanbanCtrl', function($scope, $filter, $routeParams, $rootScop
 				}
 			});
 		}
-		
+
 		//console.log(moveData.origin);
-	}
+	}*/
 	$scope.taskMoved = function(targetIdentity, moveData) {
 		//console.log(moveData);
 		//console.log(targetIdentity);
-
 		var task = moveData.dest[moveData.destPosition];
 		var origIdentity = task.status_id;
-		
+
 		function enviarMsgAtualizacao() {
 			var statusOrigem = $filter('getBy')('tasks', $scope.kanban.status, moveData.origin);
 			var statusDestino = $filter('getBy')('tasks', $scope.kanban.status, moveData.dest);
 			//console.log(status);
-			
 			if(statusOrigem != null) {
 				kanbanRefreshService.sendMessage({
 						type: 'status',
@@ -137,18 +133,13 @@ myApp.controller('KanbanCtrl', function($scope, $filter, $routeParams, $rootScop
 			}
 		}
 		//alterar todas as tasks a partir da task movida até o fim da lista alvo
-		
 		task.id = task._id;
 		task.status_id = targetIdentity;
-		task.destPosition = moveData.destPosition;
+		task.position = moveData.destPosition;
 		var taskData = new $scope.TaskResource(task);
-		taskData.$reArrange(function() {
-			//reorganiza a lista de origem do elemento movido
-		 	var taskData = new $scope.TaskResource({id: task._id, status_id: origIdentity, originPosition: moveData.origPosition});
-		 	taskData.$reArrangeOrigin(enviarMsgAtualizacao);
-		});
+		taskData.$move(enviarMsgAtualizacao);
 	};
-	
+
 	$scope.backlogTasks = [];
 	$scope.getBacklogTasks = function() {	
 		var statusTasksResource = webServiceStorage.StatusTasks($routeParams.project_name, $routeParams.kanban_id,$scope.getCurrentKanban().status[0]._id);

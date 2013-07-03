@@ -9,7 +9,7 @@ require './kaneban.rb'
 # define projeto template, com colunas padronizadas para os kanbans
 Mongoid.load!('mongoid.yaml')
 
-class AppTest
+#class AppTest
 
 
 

@@ -1,5 +1,5 @@
 #require não necessário pois está definido no arquivo .rspec
-#require './spec/spec_helper' 
+#require './spec/spec_helper'
 describe Project do
   before(:each) do
     Project.all.destroy
@@ -11,7 +11,7 @@ describe Project do
 
   it { should embed_many :kanbans }
 
-describe "templates" do
+  describe "templates" do
     before do
       Project.create!(name: "default_template", type: "template")
       Project.create!(name: "template1", type: "template")
@@ -29,15 +29,15 @@ describe "templates" do
         Project.templates.count.should eq(3)
       end
     end
-end
-
-describe "#create_kanban" do
-  subject { Project.create!(name: "PROJECT for #create_kanban test") }
-  let(:kanban_hash) do
-    {"name" => "KANBAN for #create_kanban test" }
   end
+
+  describe "#create_kanban" do
+    subject { Project.create!(name: "PROJECT for #create_kanban test") }
+    let(:kanban_hash) do
+      {"name" => "KANBAN for #create_kanban test" }
+    end
     it { subject.create_kanban(kanban_hash).id.should_not be_nil }
-end
+  end
 
   describe "#create" do
     it "add 1 more project" do

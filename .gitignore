@@ -15,3 +15,5 @@ vendor/**/**
 .rspec
 .jrubyrc	
 coverage
+/nbproject/private/
+nbproject

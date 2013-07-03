@@ -225,7 +225,7 @@ body {
 }
 
 .ui-sortable-helper {
-	background: #8cf;
+	/*background: transparent;*/
 }
 
 /***

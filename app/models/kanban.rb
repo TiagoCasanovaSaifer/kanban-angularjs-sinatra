@@ -11,7 +11,7 @@ class Kanban
   def to_json(options={})
     super(options.merge({:include => :tasks}))
   end
-
+  
   def move_task(task, status_to, position_to)
     return if task.kanban_id != self.id   #only move tasks from this kanban
     return if status_to.kanban.id != self.id #only if the status_to is within this kanban

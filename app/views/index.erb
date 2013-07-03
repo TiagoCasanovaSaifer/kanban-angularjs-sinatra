@@ -7,7 +7,7 @@
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
         <div class="container">
-        <span class="pull-left brand"><a class="kanban-title pull-left" style="color:white;font-size:16px;" href="/">KANBAN DESDR :::</a> </span>        <div class="color_select pull-left">
+        <span class="pull-left brand"><a class="kanban-title pull-left" style="color:white;font-size:16px;" href="#/">KANBAN DESDR :::</a> </span>        <div class="color_select pull-left">
           <div class="color_badge yellow" ng-model="colorYellow" ng-init="colorYellow='yellow'" data-drag="true" data-jqyoui-options="{revert: 'invalid'}" jqyoui-draggable="{'color':'yellow', placeholder:'keep',animate:true, onStart:'colorDragStart', onStop: 'colorDragStop', onDrag: 'colorDragCallback'}" data-color="yellow"></div>
           <div class="color_badge gold"  ng-model="collorGold" ng-init="collorGold='gold'" data-drag="true" data-jqyoui-options="{revert: 'invalid'}" jqyoui-draggable="{color: 'gold', placeholder:'keep',animate:true, onStart:'colorDragStart', onStop: 'colorDragStop', onDrag: 'colorDragCallback'}" data-color="gold"></div>
           <div class="color_badge green"  ng-model="colorGreen" ng-init="colorGreen='green'" data-drag="true" data-jqyoui-options="{revert: 'invalid'}" jqyoui-draggable="{color: 'green',placeholder:'keep',animate:true, onStart:'colorDragStart', onStop: 'colorDragStop', onDrag: 'colorDragCallback'}" data-color="green"></div>
@@ -130,7 +130,7 @@
           </fieldset>
           
             <input class="span2" type='text' required="true" ng-model="novoProjeto" placeholder/>
-            <div class="text-center">
+            <div class="text-center button-line">
               <button class='btn-large btn-primary text-center' type='submit'>Criar Projeto</button>
             </div>
           
@@ -157,7 +157,8 @@
             <button class='btn-large btn-primary' type='submit'>Criar Kanban</button>
           </div>
           <div class="pull-right">
-            <a ng-click='retornar()'>Retornar</a>
+            <%#<a ng-click='retornar()'>Retornar</a>%>
+            <a href="#/">Novo Projeto</a>
           </div>
         </form>
       </div>

@@ -224,3 +224,66 @@ myApp.factory('kanbanRefreshService', ['$rootScope', '$location', function($root
 
     return Service;
 }]);
+
+myApp.factory('gitlabService', function($rootScope, $q, $http){
+  var service = {};
+  var client_configuration = {
+      service_url: 'https://gitlab.com/api/v3',
+      private_token: ''
+  }
+  var header = {};
+
+  service.configure = function(service_url, private_token){
+      client_configuration.service_url = service_url;
+      client_configuration.private_token = private_token;
+      $http.defaults.headers.post = {
+              'PRIVATE-TOKEN' : private_token,
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+      };
+      $http.defaults.headers.get = {
+              'PRIVATE-TOKEN' : private_token,
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+      };
+  };
+
+  service.getProjects = function(){
+     var deferred = $q.defer();
+     $http.get(client_configuration.service_url + '/projects').success(function(data, status){
+          deferred.resolve(data);
+       });
+     return deferred.promise;
+  };
+
+  service.getIssues = function(project_id, per_page){
+     var deferred = $q.defer();
+     var url = client_configuration.service_url + '/projects/' + project_id + '/issues';
+     if(per_page === null || per_page === undefined){
+        url += '?per_page=200';
+     }
+      else {
+        url += '?per_page=' + per_page;
+      }
+     $http.get(url).success(function(data, status){
+          deferred.resolve(data);    
+       });
+     return deferred.promise;
+  };
+
+  service.createIssue = function(project_id, title, description) {
+    var deferred = $q.defer();
+    var url = client_configuration.service_url + '/projects/issues';
+    $http.post(url,
+        {
+          project_id: project_id,
+          title: title,
+          description: description }
+          ).succes(function(data,status){
+              deferred.resolve(data);
+            }
+          );
+    return deferred.promise;
+  };
+  return service;
+});

@@ -21,7 +21,7 @@ body {
 
 }
 .column {
-	height: 575px;
+	height: 100%;
 	/*background-image: url(http://subtlepatterns.com/patterns/subtle_grunge.png); background-position: initial initial; background-repeat: initial initial;*/
 	background-color: transparent;
 	width: 100%;
@@ -33,7 +33,7 @@ body {
 }
 .kanban-board {
 	margin: 14px;
-	height: 800px;
+	height: 100%;
 }
 
 .kanban-title {
@@ -59,6 +59,12 @@ body {
 	background-color: #FFFFA5;/* yellow color found here http://www.colourlovers.com/color/FFFFA5/PostIt_Gelb */
 	font-size: 16px;
 	font-family: 'Droid Serif';/*'Patrick Hand SC';*/
+
+	 box-shadow: 1px 1px 5px rgba(0,0,0,0.2);
+   /* background-image: linear-gradient(bottom, rgb(255,255,204) 9%, rgb(255,255,242) 100%);
+    background-image: -moz-linear-gradient(bottom, rgb(255,255,204) 9%, rgb(255,255,242) 100%);
+    background-image: -webkit-linear-gradient(bottom, rgb(255,255,204) 9%, rgb(255,255,242) 100%);
+    background-image: -ms-linear-gradient(bottom, rgb(255,255,204) 9%, rgb(255,255,242) 100%);*/
 }
 
 .kanban-item.red {
@@ -226,6 +232,10 @@ body {
 
 .ui-sortable-helper {
 	/*background: transparent;*/
+	-webkit-transform: rotate(358deg);
+    -moz-transform: rotate(358deg);
+    -ms-transform: rotate(358deg);
+    transform: rotate(358deg);
 }
 
 /***

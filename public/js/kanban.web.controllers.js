@@ -80,7 +80,7 @@ myApp.controller('ProjectSelectionCtrl', function($scope, $rootScope, webService
 	}
 });
 
-myApp.controller('KanbanCtrl', function($scope, $filter, $routeParams, $rootScope, kanbanRefreshService, $location, localStorageService, webServiceStorage, $q, $parse) {
+myApp.controller('KanbanCtrl', function($scope, $filter, $routeParams, $rootScope, kanbanRefreshService, $location, localStorageService, webServiceStorage, gitlabService, $q, $parse) {
 	$scope.templateFromWebService = webServiceStorage.KanbanTemplate.get();
 
 	/*$scope.taskUpdated = function(targetIdentity, moveData) {
@@ -350,15 +350,41 @@ myApp.controller('KanbanCtrl', function($scope, $filter, $routeParams, $rootScop
 
 	$scope.colorDragStart = function() {
 
-	}
+	};
 
 	$scope.colorDragStop = function() {
 
-	}
+	};
 
 	$scope.colorDragCallback = function() {
 
+	};
+
+	$scope.gitlabProjects = [];
+	$scope.gitLabIssues = [];
+
+	gitlabService.configure('https://gitlab.com/api/v3', 'eNmvdzADZsuErzVV7PNp');
+
+	$scope.getGitLabProjectNames = function(){
+
+      gitlabService.getProjects().then(function(data){
+        //$scope.gitlabProjects = data;
+        $scope.gitlabProjects = [];
+        for(idx in data){
+          $scope.gitlabProjects.push(data[idx]);
+        }
+      });
+	};
+
+	$scope.gitlabProjectChanged = function(){
+		gitlabService.getIssues($scope.gitlabProject.id).then(function(data){
+			console.log(data);
+		});
 	}
+
+	$scope.getGitLabIssues = function(){
+
+	};
 });
 
 

@@ -267,6 +267,18 @@ myApp.controller('KanbanCtrl', function($scope, $filter, $routeParams, $rootScop
 				kanban_id: $scope.kanban._id,
 				status_id: column._id
 			});
+
+			if($scope.gitlabProject != null){
+				gitlabService.createIssue($scope.gitlabProject.id, task.text, '').
+					then(function(data){
+						task.external_source = 'gitlab';
+						task.external_data = data;
+						task.$save();
+					}, 
+					function(){
+						alert('Não foi possível adicionar item ao gitlab: Projeto - ' + $scope.gitlabProject.name);
+					});
+			}
 		});
 	};
 
@@ -363,7 +375,16 @@ myApp.controller('KanbanCtrl', function($scope, $filter, $routeParams, $rootScop
 	$scope.gitlabProjects = [];
 	$scope.gitLabIssues = [];
 
-	gitlabService.configure('https://gitlab.com/api/v3', 'eNmvdzADZsuErzVV7PNp');
+	//gitlabService.configure('https://gitlab.com/api/v3', 'eNmvdzADZsuErzVV7PNp');
+	gitlabService.configure('https://gitlab.com/api/v3', null);
+
+	$scope.doGitlabLogin = function(){
+		gitlabService.login($scope.gitlab_login, $scope.gitlab_password).then(function(user){
+			$scope.getGitLabProjectNames();
+		},function(data){
+			alert('Autenticação falhou: ' + data.message)
+		});
+	}
 
 	$scope.getGitLabProjectNames = function(){
 

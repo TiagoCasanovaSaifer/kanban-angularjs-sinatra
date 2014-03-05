@@ -233,25 +233,68 @@ myApp.factory('gitlabService', function($rootScope, $q, $http){
   }
   var header = {};
 
+  service.currentUser = null;
+
   service.configure = function(service_url, private_token){
       client_configuration.service_url = service_url;
       client_configuration.private_token = private_token;
-      $http.defaults.headers.post = {
-              'PRIVATE-TOKEN' : private_token,
-              'Accept': 'application/json',
-              'Content-Type': 'application/json'
-      };
-      $http.defaults.headers.get = {
-              'PRIVATE-TOKEN' : private_token,
-              'Accept': 'application/json',
-              'Content-Type': 'application/json'
-      };
+      if(private_token != null && private_token != undefined && private_token.length > 0){
+        $http.defaults.headers.post = {
+                'PRIVATE-TOKEN' : private_token,
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+        };
+        $http.defaults.headers.get = {
+                'PRIVATE-TOKEN' : private_token,
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+        };
+      }
+      else {
+        $http.defaults.headers.post = {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+        };
+        $http.defaults.headers.get = {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+        };
+      }
   };
+
+  service.checkAuthentication = function(){
+    if (client_configuration.private_token.length > 0)
+    {
+      return false;
+    }
+    retun (this.currentUser != null);
+  };
+
+  service.login = function(login, password){
+    //TODO check parameters
+     var deferred = $q.defer();
+     $http.post(client_configuration.service_url + '/session',
+          {
+            login: login,
+            password: password
+          }).success(function(data, status){
+                service.currentUser = data;
+                service.configure(client_configuration.service_url, data.private_token)
+                deferred.resolve(data);                  
+          }).error(function(data, status){
+            deferred.reject(data);
+          });
+     return deferred.promise;
+  }
 
   service.getProjects = function(){
      var deferred = $q.defer();
-     $http.get(client_configuration.service_url + '/projects').success(function(data, status){
+     $http.get(client_configuration.service_url + '/projects').
+       success(function(data, status){
           deferred.resolve(data);
+       }).
+       error(function(error){
+          deferred.reject(error);
        });
      return deferred.promise;
   };
@@ -265,25 +308,53 @@ myApp.factory('gitlabService', function($rootScope, $q, $http){
       else {
         url += '?per_page=' + per_page;
       }
-     $http.get(url).success(function(data, status){
+     $http.get(url).
+      success(function(data, status){
           deferred.resolve(data);    
-       });
+       }).
+      error(function(data){
+          deferred.reject(data);
+      });
      return deferred.promise;
   };
 
   service.createIssue = function(project_id, title, description) {
     var deferred = $q.defer();
-    var url = client_configuration.service_url + '/projects/issues';
+    var url = client_configuration.service_url + '/projects/' + project_id + '/issues';
     $http.post(url,
-        {
-          project_id: project_id,
-          title: title,
-          description: description }
-          ).succes(function(data,status){
-              deferred.resolve(data);
-            }
-          );
+                  {
+                    title: title,
+                    description: description 
+                  }
+      ).
+      success(function(data,status){
+          deferred.resolve(data);
+        }
+      ).
+      error(function(data, status){
+        deferred.reject(data);
+      });
     return deferred.promise;
   };
+
+  service.getMilesTones = function(project_id) {
+    var deferred = $q.defer();
+     var url = client_configuration.service_url + '/projects/' + project_id + '/milestones';
+     if(per_page === null || per_page === undefined){
+        url += '?per_page=200';
+     }
+      else {
+        url += '?per_page=' + per_page;
+      }
+     $http.get(url).
+       success(function(data, status){
+          deferred.resolve(data);    
+       }).
+       error(function(data, status){
+          deferred.reject(data);
+       });
+     return deferred.promise;
+  };
+
   return service;
 });

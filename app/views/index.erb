@@ -15,11 +15,14 @@
           
           <div class="color_badge red" ng-model="colorRed" ng-init="colorRed='red'"   data-drag="true" data-jqyoui-options="{revert: 'invalid'}" jqyoui-draggable="{color: 'red',placeholder:'keep',animate:true, onStart:'colorDragStart', onStop: 'colorDragStop', onDrag: 'colorDragCallback'}" data-color="red"></div>
         </div>
-        <%#<div id="gitlab_integration">
+        <div id="gitlab_integration">
+         <input type="text" ng-model="gitlab_login"/>
+         <input type="password" ng-model="gitlab_password"/>
+         <button id="btnGitlabLogin" ng-click="doGitlabLogin()">Gitlab Login</button>
          <button id="btnGitlab" ng-click="getGitLabProjectNames()">Load GitLab Projects</button>
          <select ng-model="gitlabProject" ng-options="proj.name for proj in gitlabProjects" ng-change="gitlabProjectChanged()"></select>
         </div>
-        %>
+        
         <div class="pull-right" style="color:white;padding-top:10px">| Projeto: <a  style="font-size:14px" href="#/projeto/{{projectName}}">{{projectName}}</a> ( <span class="text-warning">{{kanban.name}}</span> )</div>
 
         <div class="nav-collapse collapse navbar-responsive-collapse">

@@ -1,0 +1,182 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+  "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <title>Jasmine Test - ControllersSpec.js</title>
+  <link rel="stylesheet" type="text/css" href="jasmine.css">
+  <script type="text/javascript" src="jasmine.js"></script>
+  <script type="text/javascript" src="jasmine-html.js"></script>
+  <script type="text/javascript" src="jasmineCompleteReporter.js"></script>
+  <script src="jquery.js"></script>
+  
+  
+</head>
+<body>
+<script type="text/javascript">
+    'use strict';
+
+/* jasmine specs for controllers go here */
+describe('Kanban controllers', function() {
+  
+  var scope, $browser, ctrl;
+  var storageServiceMock = {
+    enabled: false,
+    // return item value
+    getB: function(item) {
+      return false;
+    },
+    // return item value
+    getN: function(item) {
+      return 0;
+    },
+    // return item value
+    get: function(item) {
+      return null;
+    },
+    set: function(item, value) {
+      // set item value
+      //doNothing
+    }
+  }
+
+  beforeEach(function() {
+    //angular.mock.module('myApp');
+    module('myApp'); 
+    this.addMatchers({
+      toEqualData: function(expected) {
+        return angular.equals(this.actual, expected);
+      }
+    });
+  });
+
+  beforeEach(
+  inject(function($controller, $rootScope) {
+    scope = $rootScope;
+    ctrl = $controller('KanbanCtrl', {
+      $scope: $rootScope,
+      localStorageService: storageServiceMock
+    });
+  })
+
+  );
+
+  describe('KanbanCtrl', function() {
+
+    describe("Create a new kanban", function() {
+
+      it("not show Criar form on init", function() {
+        expect(scope.showCriar).toBe(false);
+      });
+      it('should create "kanban" from template', function() {
+        expect(scope.kanban_template()['columns'].length == 5);
+      });
+
+      it('have no kanban on init', function() {
+        expect(scope.kanbans.length).toBe(0);
+      });
+
+      it('have no kanban at init', function() {
+        expect(scope.getCurrentKanban()).toBe(undefined);
+        expect(scope.kanbans.length).toBe(0);
+      });
+
+      it('create a new kanban with a name', function() {
+        scope.new_kanban_name = "NOVO KANBAN";
+        scope.newKanban();
+        expect(scope.kanbans.length).toBe(1);
+        expect(scope.getCurrentKanban()).not.toBe(undefined);
+        expect(scope.getCurrentKanban().name).toBe("NOVO KANBAN");
+        expect(true).toBe(true);
+      });
+
+    });
+
+
+
+  });
+});
+    
+    
+    
+    
+    var myParent = window.parent;
+    var jasmineEnv = jasmine.getEnv();
+    jasmineEnv.updateInterval = 1000;
+
+    var htmlReporter = new jasmine.HtmlReporter();
+    var reportRunnerResults = htmlReporter.reportRunnerResults;
+
+    htmlReporter.reportRunnerResults = function(runner) {
+        reportRunnerResults(runner);
+
+        var specs = runner.specs();
+        var specResults;
+        var assertionCount = {total: 0, passed: 0, failed: 0};
+        var result = {};
+        for (var i = 0; i < specs.length; ++i) {
+            if (this.specFilter(specs[i])) {
+                specResults = specs[i].results();
+                assertionCount.total += specResults.totalCount;
+                assertionCount.passed += specResults.passedCount;
+                assertionCount.failed += specResults.failedCount;
+            }
+        }
+    
+        if (console && console.log) {
+            console.log('Total: ' + assertionCount.total);
+            console.log('Passed: ' + assertionCount.passed);
+            console.log('Failed: ' + assertionCount.failed);
+        }
+        
+        
+        if (assertionCount.failed) {
+            result.status = "failed";
+            result.message = assertionCount.failed + " failures";
+        } else {
+            result.status = "passed";
+            result.message = "Success! " + assertionCount.passed + " passed";
+        }
+        
+        if(myParent.reportComplete) {
+            console.log("myParent.reportComplete", result);
+            myParent.reportComplete(result);
+        }
+        
+        var totals = document.querySelectorAll(".grand-total .rs");
+        if(myParent.coverageComplete) {
+            myParent.coverageComplete({
+                message: totals && totals[0] ? totals[0].innerHTML + " coverage" : "No coverage"
+            });
+        }
+        
+    };
+   
+    jasmineEnv.addReporter(htmlReporter);
+    
+    jasmineEnv.specFilter = function(spec) {
+        return htmlReporter.specFilter(spec);
+    };
+
+    var currentWindowOnload = window.onload;
+                                                      
+    window.onload = function() {
+        if (currentWindowOnload) {
+            currentWindowOnload();
+        }
+        execJasmine();
+    };
+
+    function execJasmine() {
+        var oldCallback = jasmineEnv.currentRunner().finishCallback;
+        jasmineEnv.currentRunner().finishCallback = function () {
+            oldCallback.apply(this, arguments);
+            console.log(this, arguments);
+            
+            htmlReporter.reportRunnerResults();
+           
+        };
+        jasmineEnv.execute();
+    }
+</script>
+</body>
+</html>

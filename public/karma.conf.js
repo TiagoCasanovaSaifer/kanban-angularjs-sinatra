@@ -1,87 +1,82 @@
 // Karma configuration
-// Generated on Wed Apr 03 2013 22:34:38 GMT-0300 (Hora oficial do Brasil)
+// Generated on Mon Mar 10 2014 20:26:56 GMT-0300 (BRT)
+
+module.exports = function(config) {
+  config.set({
+
+    // base path, that will be used to resolve files and exclude
+    basePath: '',
 
 
-// base path, that will be used to resolve files and exclude
-basePath = '';
+    // frameworks to use
+    frameworks: ['jasmine'],
 
 
-// list of files / patterns to load in the browser
-files = [
-  JASMINE,
-  JASMINE_ADAPTER,
-  "js/lib/jquery.min.js",
-  "js/lib/jquery-ui.min.js",
-  "js/lib/angular.min.js",
-  "js/lib/angular-ui.js",
-  "js/lib/angular-mock.js",
-  "js/lib/dropbox.min.js",
-  "js/application.js",
-  "js/controllers.js",
-  "js/services.js",
-  "js/filters.js",
-  "js/directives.js",
-  {pattern: 'test/unit/*.js', watched: true, included: true, served: true}
-];
+    // list of files / patterns to load in the browser
+    files: [
+      "js/lib/jquery.min.js",
+      "js/lib/jquery-ui.min.js",
+      "js/lib/angular.min.js",
+      "js/lib/angular-ui.js",
+      "js/lib/angular-resource.js",
+      "js/angular-dragdrop.js",
+      "js/lib/angular-mock.js",
+      "js/lib/dropbox.min.js",
+      "js/application.js",
+      "js/controllers.js",
+      "js/services.js",
+      "js/filters.js",
+      "js/directives.js",
+      "js/kanban.web.controllers.js",
+      'test/unit/**/*Spec.js'
+    ],
 
-preprocessors = {
-  'js/application.js': 'coverage'
+
+    // list of files to exclude
+    exclude: [
+      
+    ],
+
+
+    // test results reporter to use
+    // possible values: 'dots', 'progress', 'junit', 'growl', 'coverage'
+    reporters: ['progress'],
+
+
+    // web server port
+    port: 9876,
+
+
+    // enable / disable colors in the output (reporters and logs)
+    colors: true,
+
+
+    // level of logging
+    // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
+    logLevel: config.LOG_INFO,
+
+
+    // enable / disable watching file and executing tests whenever any file changes
+    autoWatch: true,
+
+
+    // Start these browsers, currently available:
+    // - Chrome
+    // - ChromeCanary
+    // - Firefox
+    // - Opera (has to be installed with `npm install karma-opera-launcher`)
+    // - Safari (only Mac; has to be installed with `npm install karma-safari-launcher`)
+    // - PhantomJS
+    // - IE (only Windows; has to be installed with `npm install karma-ie-launcher`)
+    browsers: ['Chrome'],//, 'Firefox'],
+
+
+    // If browser does not capture in given timeout [ms], kill it
+    captureTimeout: 60000,
+
+
+    // Continuous Integration mode
+    // if true, it capture browsers, run tests and exit
+    singleRun: false
+  });
 };
-
-reporters = ['coverage'];
-
-coverageReporter = {
-  type : 'html',
-  dir : 'coverage/'
-}
-
-// list of files to exclude
-exclude = [
-  
-];
-
-
-// test results reporter to use
-// possible values: 'dots', 'progress', 'junit'
-reporters = ['progress', 'junit'];
-
-
-// web server port
-port = 9876;
-
-
-// cli runner port
-runnerPort = 9100;
-
-
-// enable / disable colors in the output (reporters and logs)
-colors = true;
-
-
-// level of logging
-// possible values: LOG_DISABLE || LOG_ERROR || LOG_WARN || LOG_INFO || LOG_DEBUG
-logLevel = LOG_INFO;
-
-
-// enable / disable watching file and executing tests whenever any file changes
-autoWatch = true;
-
-
-// Start these browsers, currently available:
-// - Chrome
-// - ChromeCanary
-// - Firefox
-// - Opera
-// - Safari (only Mac)
-// - PhantomJS
-// - IE (only Windows)
-browsers = ['Chrome'];
-
-
-// If browser does not capture in given timeout [ms], kill it
-captureTimeout = 60000;
-
-
-// Continuous Integration mode
-// if true, it capture browsers, run tests and exit
-singleRun = false;

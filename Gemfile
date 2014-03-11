@@ -37,7 +37,7 @@ group :development do
 end
 
 platforms :jruby do
-  #gem 'trinidad'
+  gem 'trinidad'
 end
 
 group :test do

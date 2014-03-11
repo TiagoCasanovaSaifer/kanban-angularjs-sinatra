@@ -37,6 +37,7 @@ myApp.controller('ProjectSelectionCtrl', function($scope, $rootScope, webService
 
 	$scope.kanbanChanged = function() {
 		var KanbanResource = webServiceStorage.Kanban($scope.currentProject);
+		console.log("CURRENT KANBAN:");console.log($scope.currentKanban);
 		var kanban = KanbanResource.get({kanbanId: $scope.currentKanban._id}, function(kanban) {
 			webServiceStorage.setLastKanban(kanban);
 			$location.path('projeto/' + $scope.currentProject + "/" + $scope.currentKanban._id);

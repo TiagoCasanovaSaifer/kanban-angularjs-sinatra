@@ -28,7 +28,7 @@ describe('Kanban controllers', function() {
     // console.log(myApp);
 
     angular.mock.module('myApp');
- 
+    module('ngResource');
 
     //module('myApp'); 
     this.addMatchers({
@@ -39,18 +39,20 @@ describe('Kanban controllers', function() {
   });
 
   beforeEach(
-  inject(function($controller, $rootScope) {
+  inject(function($controller, $rootScope, _$httpBackend_) {
     //scope = $rootScope;
     
     // console.log("JERE");
     // console.log(myApp.controller('KanbanCtrl'));
     //create an empty scope
+    var mockBackend = $httpBackend_;
     scope = $rootScope.$new();
     console.log("SCOPE: ");
     console.log(scope);
     ctrl = $controller('KanbanCtrl', {
         $scope: scope,
-      localStorageService: storageServiceMock
+      localStorageService: storageServiceMock,
+      webServiceStorage: _$httpBackend_
     });
 
     
@@ -62,11 +64,11 @@ describe('Kanban controllers', function() {
 
   describe('KanbanCtrl', function() {
 
-    describe("Create a new kanban", function() {
+    /*describe("Create a new kanban", function() {
       it("backlog tasks should be empty", function(){
         console.log(scope.controlEnterTipEnabled);
         //expect(scope.backlogTasks).toBe([]);
-      });
+      });*/
 
       // it("not show Criar form on init", function() {
       //   expect(scope.showCriar).toBe(false);
@@ -93,7 +95,7 @@ describe('Kanban controllers', function() {
       //   expect(true).toBe(true);
       // });
 
-    });
+    /*});*/
 
 
 

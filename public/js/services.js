@@ -1,3 +1,104 @@
+myApp.factory('kanbanProviderService', function($rootScope, webServiceStorage, localStorageService, dropboxService, gitlabService, $location){
+
+  var callMethod = function(instance, methodName, arguments) {
+    if(instance == null || instance === 'undefined') {
+      throw new Error("instance is missing");
+    }
+    if(methodName == null || methodName === 'undefined') {
+      throw new Error("methodName is  missing");
+    }
+    var func = instance[methodName];
+
+    if(func == null) {
+      throw new Error('Not yet implemented');
+    }
+    
+    if(typeof(func) !== 'function') {
+      throw new Error(methodName  + ' is not a function');
+    }
+    return func.apply(instance, arguments);
+  };
+  var providerService = {  
+    currentProvider: null,
+    providers: [],
+    getCurrentProvider: function() {
+      return this.currentProvider;
+    },
+    setCurrentProvider: function(provider) {
+      this.currentProvider = provider;
+    },
+    getProviderInstance: function() {
+      switch(this.currentProvider) {
+        case 'Gitlab':
+          return gitlabService;
+          break;
+        case 'WebService':
+          return webServiceStorage;
+          break;
+        case 'Dropbox':
+          return dropboxService;
+          break;
+        case 'Local':
+          return localStorageService;
+          break;
+        case null: 
+          throw new Error('provider not setted');
+          break;
+        default:
+          throw new Error('unknown provider: ' + this.currentProvider);
+      }
+    },
+    /* project calls */
+    saveProject: function(project){
+      callMethod(this.getProviderInstance(), 'saveProject');
+    },
+    destroyProject: function(project){
+      callMethod(this.getProviderInstance(), 'destroyProject');
+    },
+    getProjects: function(){
+      callMethod(this.getProviderInstance(), 'getProjects');
+    },
+    /* kanban calls */
+    saveKanban: function(kanban){
+      callMethod(this.getProviderInstance(), 'saveKanban');
+    },
+    
+    destroyKanban: function(kanban){
+      callMethod(this.getProviderInstance(), 'destroyKanban');
+    },
+
+    getKanbans: function(project){
+      callMethod(this.getProviderInstance(), 'getKanbans');
+    },
+
+    /* kanbam item calls */
+    saveKanbanItem: function(kanban_item){
+      callMethod(this.getProviderInstance(), 'saveKanbanItem');
+    },
+    destroyKanbanItem: function(kanban_item){
+      callMethod(this.getProviderInstance(), 'destroyKanbanItem');
+    },
+    getKanbanItems: function(kanban) {
+      callMethod(this.getProviderInstance(), 'getKanbanItems');
+    }, 
+    getKanbanItemTemplate: function(kanban){
+      callMethod(this.getProviderInstance(), 'getKanbanItemTemplate');
+    },
+
+    /* kanban templates calls */
+    getTemplates: function(project){
+      callMethod(this.getProviderInstance(), 'getTemplates');
+    },
+
+    /* kanban columns calls */
+    getKanbanColumns: function(kanban){
+      callMethod(this.getProviderInstance(), 'getKanbanColumns');
+    }
+    
+  };
+  return providerService;
+});
+
 myApp.factory('webServiceStorage', function($rootScope, $resource){
   var lastKanban = null;
   return {

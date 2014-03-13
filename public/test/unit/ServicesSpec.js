@@ -55,6 +55,7 @@ describe('Kanban services', function() {
 	  	kanbanProviderService.setCurrentProvider('Gitlab');
 	  	expect(kanbanProviderService.getProviderInstance()).toEqualData(gitlabService);
 	  }));
+    
   });
 
 

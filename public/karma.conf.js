@@ -11,7 +11,18 @@ module.exports = function(config) {
     // frameworks to use
     frameworks: ['jasmine'],
 
+     preprocessors: {
+      // source files, that you wanna generate coverage for
+      // do not include tests or libraries
+      // (these files will be instrumented by Istanbul)
+      'js/*.js': ['coverage']
+    },
 
+    // optionally, configure the reporter
+    coverageReporter: {
+      type : 'html',
+      dir : 'coverage/'
+    },
     // list of files / patterns to load in the browser
     files: [
       "js/lib/jquery.min.js",
@@ -40,7 +51,7 @@ module.exports = function(config) {
 
     // test results reporter to use
     // possible values: 'dots', 'progress', 'junit', 'growl', 'coverage'
-    reporters: ['progress'],
+    reporters: ['coverage'],
 
 
     // web server port

@@ -1,0 +1,162 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+  "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <title>Jasmine Test - ServicesSpec.js</title>
+  <link rel="stylesheet" type="text/css" href="jasmine.css">
+  <script type="text/javascript" src="jasmine.js"></script>
+  <script type="text/javascript" src="jasmine-html.js"></script>
+  <script type="text/javascript" src="jasmineCompleteReporter.js"></script>
+  <script src="jquery.js"></script>
+  
+  
+</head>
+<body>
+<script type="text/javascript">
+    'use strict';
+
+/* jasmine specs for controllers go here */
+describe('Kanban services', function() {
+
+  describe('Kanban Provider Service', function(){
+
+  	beforeEach(function() {
+    angular.mock.module('myApp');
+    //module('myApp'); 
+    //module('ngResource');
+    //module('myApp'); 
+    this.addMatchers({
+      toEqualData: function(expected) {
+        return angular.equals(this.actual, expected);
+      }
+    });
+  });
+
+/*  beforeEach(inject(function($rootScope){
+  	
+  }));*/
+
+  	it('has current Provider null if none provider were previously setted', inject(function($rootScope, kanbanProviderService){
+  		//var scope = $rootScope.$new();
+  		expect(kanbanProviderService.getCurrentProvider()).toBe(null);
+  	}));
+
+  	it('throws error if call methods before set a provider', inject(function($rootScope, kanbanProviderService){
+  		//var scope = $rootScope.$new();
+  		expect(function() { kanbanProviderService.getKanbans(); }).toThrow(new Error("provider not setted"));
+  	}));
+
+  	it('throws error when calling methods with a unknown provider', inject(function($rootScope, kanbanProviderService){
+  		kanbanProviderService.setCurrentProvider('new');
+  		expect(function() { kanbanProviderService.getKanbans(); }).toThrow(new Error("unknown provider: new"));
+  	}));
+
+  	it('throws error when calling methods not implemented by provider', inject(function($rootScope, kanbanProviderService){
+  		kanbanProviderService.setCurrentProvider('Dropbox');
+  		expect(function() { kanbanProviderService.destroyKanban(null); }).toThrow(new Error("Not yet implemented"));
+  	}));
+
+  	it('allow define current provider', inject(function(kanbanProviderService){
+  		kanbanProviderService.setCurrentProvider('Gitlab');
+	  	expect(kanbanProviderService.getCurrentProvider()).toBe("Gitlab");
+  	}));
+
+		it('have provider service', inject(function(kanbanProviderService){	  	
+	  	expect(kanbanProviderService).not.toBe(null);
+	  }));
+
+	  it('return provider which matches current setted provider', inject(function($rootScope, kanbanProviderService, webServiceStorage, localStorageService, dropboxService, gitlabService){
+			expect(kanbanProviderService.getCurrentProvider()).toBe(null);
+	  	kanbanProviderService.setCurrentProvider('Gitlab');
+	  	expect(kanbanProviderService.getProviderInstance()).toEqualData(gitlabService);
+	  }));
+    
+  });
+
+
+});
+    
+    
+    
+    
+    var myParent = window.parent;
+    var jasmineEnv = jasmine.getEnv();
+    jasmineEnv.updateInterval = 1000;
+
+    var htmlReporter = new jasmine.HtmlReporter();
+    var reportRunnerResults = htmlReporter.reportRunnerResults;
+
+    htmlReporter.reportRunnerResults = function(runner) {
+        reportRunnerResults(runner);
+
+        var specs = runner.specs();
+        var specResults;
+        var assertionCount = {total: 0, passed: 0, failed: 0};
+        var result = {};
+        for (var i = 0; i < specs.length; ++i) {
+            if (this.specFilter(specs[i])) {
+                specResults = specs[i].results();
+                assertionCount.total += specResults.totalCount;
+                assertionCount.passed += specResults.passedCount;
+                assertionCount.failed += specResults.failedCount;
+            }
+        }
+    
+        if (console && console.log) {
+            console.log('Total: ' + assertionCount.total);
+            console.log('Passed: ' + assertionCount.passed);
+            console.log('Failed: ' + assertionCount.failed);
+        }
+        
+        
+        if (assertionCount.failed) {
+            result.status = "failed";
+            result.message = assertionCount.failed + " failures";
+        } else {
+            result.status = "passed";
+            result.message = "Success! " + assertionCount.passed + " passed";
+        }
+        
+        if(myParent.reportComplete) {
+            console.log("myParent.reportComplete", result);
+            myParent.reportComplete(result);
+        }
+        
+        var totals = document.querySelectorAll(".grand-total .rs");
+        if(myParent.coverageComplete) {
+            myParent.coverageComplete({
+                message: totals && totals[0] ? totals[0].innerHTML + " coverage" : "No coverage"
+            });
+        }
+        
+    };
+   
+    jasmineEnv.addReporter(htmlReporter);
+    
+    jasmineEnv.specFilter = function(spec) {
+        return htmlReporter.specFilter(spec);
+    };
+
+    var currentWindowOnload = window.onload;
+                                                      
+    window.onload = function() {
+        if (currentWindowOnload) {
+            currentWindowOnload();
+        }
+        execJasmine();
+    };
+
+    function execJasmine() {
+        var oldCallback = jasmineEnv.currentRunner().finishCallback;
+        jasmineEnv.currentRunner().finishCallback = function () {
+            oldCallback.apply(this, arguments);
+            console.log(this, arguments);
+            
+            htmlReporter.reportRunnerResults();
+           
+        };
+        jasmineEnv.execute();
+    }
+</script>
+</body>
+</html>

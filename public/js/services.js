@@ -1,12 +1,6 @@
 myApp.factory('kanbanProviderService', function($rootScope, webServiceStorage, localStorageService, dropboxService, gitlabService, $location){
 
   var callMethod = function(instance, methodName, arguments) {
-    if(instance == null || instance === 'undefined') {
-      throw new Error("instance is missing");
-    }
-    if(methodName == null || methodName === 'undefined') {
-      throw new Error("methodName is  missing");
-    }
     var func = instance[methodName];
 
     if(func == null) {
@@ -31,19 +25,14 @@ myApp.factory('kanbanProviderService', function($rootScope, webServiceStorage, l
       switch(this.currentProvider) {
         case 'Gitlab':
           return gitlabService;
-          break;
         case 'WebService':
           return webServiceStorage;
-          break;
         case 'Dropbox':
           return dropboxService;
-          break;
         case 'Local':
           return localStorageService;
-          break;
         case null: 
           throw new Error('provider not setted');
-          break;
         default:
           throw new Error('unknown provider: ' + this.currentProvider);
       }
@@ -438,10 +427,10 @@ myApp.factory('gitlabService', function($rootScope, $q, $http){
     return deferred.promise;
   };
 
-  service.getMilesTones = function(project_id) {
+  service.getMilestones = function(project_id, per_page) {
     var deferred = $q.defer();
      var url = client_configuration.service_url + '/projects/' + project_id + '/milestones';
-     if(per_page === null || per_page === undefined){
+     if(per_page === null || per_page === 'undefined'){
         url += '?per_page=200';
      }
       else {

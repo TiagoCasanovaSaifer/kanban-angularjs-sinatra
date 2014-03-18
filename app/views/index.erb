@@ -123,6 +123,102 @@
      
   </script>
 
+<script type="text/ng-template" id="gitlabProjects.html">
+    <div class="container container-entrada">
+      <div id='provider_select' ng-show="gitlab_phase == 'select_provider'" >
+        <form  class="form-entrada">
+          <fieldset>
+            <legend>Integração com Gitlab</legend>
+            <label>Servidor Gitlab:
+              <select ng-model="gitlab_provider" ng-options="provider.name for provider in gitlabProviders" name="gitlab_provider" ng-change="gitlabProviderChanged()"></select>
+            </label>
+          </fieldset>
+         <div class="text-center button-line">
+            <a href="#gitlabLoginModal" data-toggle="modal">Confirmar</a>
+          </div>
+        </form>
+      </div>
+      <div id='project_select' ng-show="gitlab_phase == 'select_project'">
+        <form  class="form-entrada" ng-submit="gitlabSelectProject()">
+          <fieldset>
+            <legend>Integração com Gitlab</legend>
+            <label>Servidor Gitlab: 
+            <select ng-model="gitlab_provider" ng-options="provider.name for provider in gitlabProviders" name="gitlab_provider" disabled></select>
+            </label>
+            <label>Projeto Gitlab:
+              <select ng-model="gitlab_project" ng-options="project.name for project in gitlabProjects" name="gitlab_project"></select>
+            </label>
+          </fieldset>
+         <div class="text-center button-line">
+            <input type="submit" value="Ok"/>
+          </div>
+        </form>
+      </div>
+      <div id='milestone_select' ng-show="gitlab_phase == 'select_milestone'">
+        <form  class="form-entrada" ng-submit="gitlabSelectMilestone()">
+          <fieldset>
+            <legend>Integração com Gitlab</legend>
+            <label>Servidor Gitlab: 
+            <select ng-model="gitlab_provider" ng-options="provider.name for provider in gitlabProviders" name="gitlab_provider" disabled></select>
+            </label>
+            <label>Projeto Gitlab:
+              <select ng-model="gitlab_project" ng-options="project.name for project in gitlabProjects" name="gitlab_project" disabled></select>
+            </label>
+            <label>Milestones:
+              <select ng-model="gitlab_milestone" ng-options="milestone.title for milestone in gitlabMilestones" name="gitlab_milestone"></select>
+            </label>
+          </fieldset>
+         <div class="text-center button-line">
+            <input type="submit" value="Ok"/>
+          </div>
+          </form>
+      </div>
+      <div id='gitlab_filter' ng-show="gitlab_phase == 'setup_filter'">
+      </div>
+    </div>
+
+<div id="gitlabLoginModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="gitlabLoginModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="gitlabLoginModalLabel">Gitlab Login</h3>
+  </div>
+  <div class="modal-body" class="span12 pagination-centered">
+    <form ng-submit="gitlabLogin()" class="form-entrada">
+          <fieldset>
+            <legend>Integração com Gitlab</legend>
+            <label>Gitlab Login:<input type="text" ng-model="gitlab_login" name="gitlab_login" value=""></label>
+            <label><input type="password" name="gitlab_password" ng-model="gitlab_password"></label>
+          </fieldset>
+        </form>
+  </div>
+  <div class="modal-footer">
+    <button ng-click="loginGitLab()" class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Login no Gitlab</button>
+  </div>
+</div> 
+
+<div id="gitlabProjectModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="gitlabProjectsModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="gitlabProjectsModalLabel">Gitlab Login</h3>
+  </div>
+  <div class="modal-body" class="span12 pagination-centered">
+    <!-- SELECIONAR PROJETO -->
+    <div id="gitlab_projects">
+    </div>
+    <!-- DEFINIR MILESTONE -->
+    <div id="gitlab_milestone">
+    </div>
+    <!-- DEFINIR LABELS -->
+    <div id="gitlab_labels">
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button ng-click="criarKanban()" class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Entrar</button>
+  </div>
+</div> 
+
+</script>
+
 <script type="text/ng-template"  id="projectSelection.html">
  <div class="container container-entrada">
       <div ng-show="showProjetoSelection">

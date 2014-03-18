@@ -1,9 +1,75 @@
+myApp.controller('GitlabProjectsCtrl', function($scope, $rootScope, $route, $routeParams, $location, $q, gitlabService){
+
+	$scope.gitlabProviders = [
+		{
+			id: 'gitlab.com',
+			name: 'Gitlab.com',
+			api_host: 'https://gitlab.com/api/v3'
+		},
+		{
+			id: 'gitlab.serpro',
+			name: 'Gitlab do Serpro',
+			api_host: 'https://gitlab.serpro/api/v3'
+		}
+	];
+
+	$scope.gitlabProjects = [];
+
+	$scope.gitlab_phase = 'select_provider';
+
+	$scope.gitlabProviderChanged = function(){
+		$rootScope.gitlabProvider = $scope.gitlab_provider;
+
+		console.log($scope.gitlab_provider);
+
+		gitlabService.configure($scope.gitlab_provider.api_host, '');
+	};
+
+	$scope.getGitLabProjectNames = function(){
+      gitlabService.getProjects().then(function(data){
+        $scope.gitlabProjects = [];
+        for(idx in data){
+          $scope.gitlabProjects.push(data[idx]);
+        }
+      });
+	};
+
+	$scope.loginGitLab = function() {
+		var login = $scope.gitlab_login;
+		var password = $scope.gitlab_password;
+
+		gitlabService.login(login, password).then(function(user){
+			$scope.gitlab_phase = 'select_project';
+			$scope.getGitLabProjectNames();
+		},function(data){
+			alert('Autenticação falhou: ' + data.message)
+		});
+	};
+
+	$scope.gitlabSelectProject = function() {
+		gitlabService.getMilestones($scope.gitlab_project.id).then(function(milestones){
+			$scope.gitlab_phase = 'select_milestone';
+			$scope.gitlabMilestones = milestones;
+			console.log(milestones);
+		});
+	};
+
+	$scope.gitlabSelectMilestone = function() {
+		console.log("SO FAR SO GOOD");
+		console.log($scope.gitlab_milestone);
+	}
+
+
+});
+
 myApp.controller('ProjectSelectionCtrl', function($scope, $rootScope, webServiceStorage, $route, $routeParams, $location, $q) {
 	$rootScope.localStorageEnabled = false;
 	$rootScope.dropboxServiceEnabled = false;
 
 	$scope.$route = $route;
 	$scope.$routeParams = $routeParams;
+
+	$scope.currentProvider = $routeParams.provider_name;
 
 	$scope.currentProject = $routeParams.project_name;
 	$scope.showProjetoSelection = true;

@@ -218,4 +218,5 @@ DEPENDENCIES
   sinatra-websocket
   therubyracer
   thin
+  trinidad
   warbler
